@@ -15,7 +15,11 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ProgressBar
 import android.widget.Toast
+import com.google.android.gms.auth.api.Auth
+import com.google.android.gms.auth.api.signin.*
+import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.GoogleAuthProvider
 import com.management.pmag.ui.dashboard.DashboardActivity
 
 import com.management.pmag.R
@@ -25,16 +29,13 @@ class LoginActivity : AppCompatActivity() {
 
     private lateinit var loginViewModel: LoginViewModel
     private lateinit var firebaseAuth: FirebaseAuth
-
+    private lateinit var googleSignInClient: GoogleSignInClient
+    private val RC_SIGN_IN = 9001
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
-
-        firebaseAuth = FirebaseAuth.getInstance()
-        if (firebaseAuth.currentUser != null) {
-            startActivity(Intent(applicationContext, DashboardActivity::class.java))
-        }
         super.onCreate(savedInstanceState)
+        firebaseUserAuthorizedCheck()
 
         setContentView(R.layout.activity_login)
 
@@ -43,6 +44,7 @@ class LoginActivity : AppCompatActivity() {
         val login = findViewById<Button>(R.id.login)
         val loading = findViewById<ProgressBar>(R.id.loading)
         val register = findViewById<Button>(R.id.register)
+        val signIn = findViewById<Button>(R.id.signInByGoogle)
 
         loginViewModel = ViewModelProviders.of(this, LoginViewModelFactory())
             .get(LoginViewModel::class.java)
@@ -111,6 +113,54 @@ class LoginActivity : AppCompatActivity() {
 
         register.setOnClickListener {
             startActivity(Intent(applicationContext, RegisterActivity::class.java))
+        }
+
+        signIn.setOnClickListener {
+            googleSignIn()
+        }
+    }
+
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == RC_SIGN_IN) {
+            val result: GoogleSignInResult = Auth.GoogleSignInApi.getSignInResultFromIntent(data)
+            if (result.isSuccess) {
+                val account: GoogleSignInAccount = result.signInAccount!!
+                authWithGoogle(account)
+            }
+        }
+
+    }
+
+    private fun authWithGoogle(account: GoogleSignInAccount) {
+        val credential: AuthCredential = GoogleAuthProvider.getCredential(account.idToken, null)
+        firebaseAuth.signInWithCredential(credential).addOnCompleteListener {
+            if (it.isSuccessful) {
+                startActivity(Intent(applicationContext, DashboardActivity::class.java))
+                finish()
+            } else {
+                Toast.makeText(applicationContext, "Auth Error", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+    }
+
+    private fun googleSignIn() {
+        val googleSignInOption: GoogleSignInOptions =
+            GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build()
+        googleSignInClient = GoogleSignIn.getClient(this, googleSignInOption)
+        val signInIntent = googleSignInClient.signInIntent
+        startActivityForResult(signInIntent, RC_SIGN_IN)
+    }
+
+    private fun firebaseUserAuthorizedCheck() {
+        firebaseAuth = FirebaseAuth.getInstance()
+        if (firebaseAuth.currentUser != null) {
+            startActivity(Intent(applicationContext, DashboardActivity::class.java))
         }
     }
 
