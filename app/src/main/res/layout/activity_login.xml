@@ -10,18 +10,20 @@
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:paddingTop="@dimen/activity_vertical_margin"
-        tools:context=".ui.login.LoginActivity">
+        tools:context=".ui.authorization.login.LoginActivity">
 
     <Button
-            android:text="@string/register_button"
+            android:id="@+id/register"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/register"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginEnd="48dp"
-            app:layout_constraintStart_toStartOf="parent"
             android:layout_marginStart="48dp"
-            app:layout_constraintTop_toBottomOf="@+id/login" android:layout_marginTop="16dp"/>
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="48dp"
+            android:text="@string/register_button"
+            app:layout_constraintEnd_toEndOf="@+id/login"
+            app:layout_constraintStart_toStartOf="@+id/login"
+            app:layout_constraintTop_toTopOf="@+id/loading" />
+
     <EditText
             android:id="@+id/username"
             android:layout_width="0dp"
@@ -35,61 +37,73 @@
             android:selectAllOnFocus="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent"
+            android:importantForAutofill="no" />
 
     <EditText
-            android:id="@+id/registerPassword"
+            android:id="@+id/password"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
             android:layout_marginTop="8dp"
-            android:layout_marginEnd="24dp"
 
             android:hint="@string/prompt_password"
             android:imeActionLabel="@string/action_sign_in_short"
             android:imeOptions="actionDone"
             android:inputType="textPassword"
             android:selectAllOnFocus="true"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/username"/>
+            app:layout_constraintEnd_toEndOf="@+id/username"
+            app:layout_constraintStart_toStartOf="@+id/username"
+            app:layout_constraintTop_toBottomOf="@+id/username"
+            android:importantForAutofill="no" />
 
     <Button
             android:id="@+id/login"
-            android:enabled="false"
             android:layout_width="wrap_content"
             android:layout_height="48dp"
             android:layout_gravity="start"
             android:layout_marginStart="48dp"
-            android:layout_marginTop="16dp"
             android:layout_marginEnd="48dp"
+            android:layout_marginBottom="8dp"
+            android:enabled="false"
             android:text="@string/action_sign_in"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/registerPassword"
-            android:layout_marginBottom="8dp"
-            app:layout_constraintVertical_bias="0.19999999" app:layout_constraintBottom_toBottomOf="parent"/>
+            app:layout_constraintTop_toBottomOf="@+id/password"
+            app:layout_constraintVertical_bias="0.19999999" />
 
     <ProgressBar
             android:id="@+id/loading"
-            android:visibility="gone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginStart="32dp"
-            android:layout_marginTop="64dp"
-            android:layout_marginEnd="32dp"
-            android:layout_marginBottom="64dp"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/registerPassword"
-            app:layout_constraintStart_toStartOf="@+id/registerPassword"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.3"/>
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
     <Button
-            android:text="@string/google_button"
+            android:id="@+id/signInByGoogle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/signInByGoogle" android:layout_marginStart="8dp"
-            app:layout_constraintTop_toBottomOf="@+id/register" app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"/>
+            android:layout_marginTop="16dp"
+            android:background="@mipmap/btn_google_signin_dark_normal_hdpi"
+            android:text="@string/google_button"
+            android:textColor="@android:color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/register" />
+
+    <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/register_activity_or"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toTopOf="@+id/signInByGoogle"
+            app:layout_constraintEnd_toEndOf="@+id/signInByGoogle"
+            app:layout_constraintStart_toStartOf="@+id/signInByGoogle"
+            app:layout_constraintTop_toBottomOf="@+id/register" />
 </androidx.constraintlayout.widget.ConstraintLayout>

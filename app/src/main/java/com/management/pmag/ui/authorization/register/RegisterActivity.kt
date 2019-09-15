@@ -1,4 +1,4 @@
-package com.management.pmag.ui.register
+package com.management.pmag.ui.authorization.register
 
 import android.content.Intent
 import android.os.Bundle
@@ -7,7 +7,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.google.firebase.auth.FirebaseAuth
+import com.management.pmag.PMAGApp
 import com.management.pmag.ui.dashboard.DashboardActivity
 import com.management.pmag.R
 
@@ -16,7 +16,6 @@ class RegisterActivity : AppCompatActivity() {
     lateinit var email: EditText
     lateinit var password: EditText
     lateinit var signUp: Button
-    lateinit var firebaseAuth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,7 +25,6 @@ class RegisterActivity : AppCompatActivity() {
         password = findViewById(R.id.registerPassword)
         signUp = findViewById(R.id.signUpButton)
 
-        firebaseAuth = FirebaseAuth.getInstance()
 
         signUp.setOnClickListener {
             val email: String = email.text.toString()
@@ -38,11 +36,11 @@ class RegisterActivity : AppCompatActivity() {
             if (TextUtils.isEmpty(password)) {
                 Toast.makeText(applicationContext, "Please fill in the required fields", Toast.LENGTH_SHORT).show()
             }
-            if (password.length < 6) {
-                Toast.makeText(applicationContext, "Password must be at least 6 characters", Toast.LENGTH_SHORT).show()
+            if (password.length < 8) {
+                Toast.makeText(applicationContext, "Password must be at least 8 characters", Toast.LENGTH_SHORT).show()
             }
 
-            firebaseAuth.createUserWithEmailAndPassword(email, password)
+            PMAGApp.fAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
                         startActivity(Intent(applicationContext, DashboardActivity::class.java))
@@ -53,7 +51,7 @@ class RegisterActivity : AppCompatActivity() {
                 }
         }
 
-        if (firebaseAuth.currentUser != null) {
+        if (PMAGApp.fAuth.currentUser != null) {
             startActivity(Intent(applicationContext, DashboardActivity::class.java))
         }
     }

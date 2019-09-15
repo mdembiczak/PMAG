@@ -1,4 +1,4 @@
-package com.management.pmag.ui.login
+package com.management.pmag.ui.authorization.login
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider

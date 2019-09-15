@@ -4,23 +4,31 @@ import android.os.Bundle
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
 import android.widget.TextView
+import androidx.fragment.app.FragmentTransaction
+import com.management.pmag.ProjectsFragment
 import com.management.pmag.R
+import com.management.pmag.dummy.ProjectsListTemporaryData
 
-class DashboardActivity : AppCompatActivity() {
+class DashboardActivity : AppCompatActivity(), ProjectsFragment.OnListFragmentInteractionListener {
+    var fragmentTransaction: FragmentTransaction = supportFragmentManager.beginTransaction()
 
-    private lateinit var textMessage: TextView
+    override fun onListFragmentInteraction(item: ProjectsListTemporaryData.DummyItem?) {
+        fragmentTransaction.setTransitionStyle(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+    }
+
+//TODO: MD set valid fragments
     private val onNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
             R.id.navigation_home -> {
-                textMessage.setText(R.string.title_home)
+//                fragmentTransaction.replace()
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_dashboard -> {
-                textMessage.setText(R.string.title_dashboard)
+//                fragmentTransaction.replace()
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_notifications -> {
-                textMessage.setText(R.string.title_notifications)
+//                fragmentTransaction.replace()
                 return@OnNavigationItemSelectedListener true
             }
         }
@@ -32,7 +40,6 @@ class DashboardActivity : AppCompatActivity() {
         setContentView(R.layout.activity_dashboard)
         val navView: BottomNavigationView = findViewById(R.id.nav_view)
 
-        textMessage = findViewById(R.id.message)
         navView.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener)
     }
 }

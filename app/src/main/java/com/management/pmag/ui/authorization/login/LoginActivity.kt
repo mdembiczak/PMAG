@@ -1,4 +1,4 @@
-package com.management.pmag.ui.login
+package com.management.pmag.ui.authorization.login
 
 import android.app.Activity
 import android.content.Intent
@@ -18,19 +18,19 @@ import android.widget.Toast
 import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.signin.*
 import com.google.firebase.auth.AuthCredential
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
+import com.management.pmag.PMAGApp
 import com.management.pmag.ui.dashboard.DashboardActivity
 
 import com.management.pmag.R
-import com.management.pmag.ui.register.RegisterActivity
+import com.management.pmag.data.Result
+import com.management.pmag.ui.authorization.register.RegisterActivity
 
 class LoginActivity : AppCompatActivity() {
 
     private lateinit var loginViewModel: LoginViewModel
-    private lateinit var firebaseAuth: FirebaseAuth
     private lateinit var googleSignInClient: GoogleSignInClient
-    private val RC_SIGN_IN = 9001
+    private val rcSignIn = 9001
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,19 +40,20 @@ class LoginActivity : AppCompatActivity() {
         setContentView(R.layout.activity_login)
 
         val username = findViewById<EditText>(R.id.username)
-        val password = findViewById<EditText>(R.id.registerPassword)
+        val password = findViewById<EditText>(R.id.password)
         val login = findViewById<Button>(R.id.login)
         val loading = findViewById<ProgressBar>(R.id.loading)
         val register = findViewById<Button>(R.id.register)
         val signIn = findViewById<Button>(R.id.signInByGoogle)
 
-        loginViewModel = ViewModelProviders.of(this, LoginViewModelFactory())
+        loginViewModel = ViewModelProviders.of(this,
+            LoginViewModelFactory()
+        )
             .get(LoginViewModel::class.java)
 
         loginViewModel.loginFormState.observe(this@LoginActivity, Observer {
             val loginState = it ?: return@Observer
 
-            // disable login button unless both username / password is valid
             login.isEnabled = loginState.isDataValid
 
             if (loginState.usernameError != null) {
@@ -63,7 +64,7 @@ class LoginActivity : AppCompatActivity() {
             }
         })
 
-        loginViewModel.loginResult.observe(this@LoginActivity, Observer {
+        loginViewModel.loginFormResult.observe(this@LoginActivity, Observer {
             val loginResult = it ?: return@Observer
 
             loading.visibility = View.GONE
@@ -107,7 +108,11 @@ class LoginActivity : AppCompatActivity() {
 
             login.setOnClickListener {
                 loading.visibility = View.VISIBLE
-                loginViewModel.login(username.text.toString(), password.text.toString())
+                val result =
+                    loginViewModel.login(username.text.toString(), password.text.toString())
+                if (result is Result.Success) {
+                    startActivity(Intent(applicationContext, DashboardActivity::class.java))
+                }
             }
         }
 
@@ -123,7 +128,7 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == RC_SIGN_IN) {
+        if (requestCode == rcSignIn) {
             val result: GoogleSignInResult = Auth.GoogleSignInApi.getSignInResultFromIntent(data)
             if (result.isSuccess) {
                 val account: GoogleSignInAccount = result.signInAccount!!
@@ -135,7 +140,7 @@ class LoginActivity : AppCompatActivity() {
 
     private fun authWithGoogle(account: GoogleSignInAccount) {
         val credential: AuthCredential = GoogleAuthProvider.getCredential(account.idToken, null)
-        firebaseAuth.signInWithCredential(credential).addOnCompleteListener {
+        PMAGApp.fAuth.signInWithCredential(credential).addOnCompleteListener {
             if (it.isSuccessful) {
                 startActivity(Intent(applicationContext, DashboardActivity::class.java))
                 finish()
@@ -154,12 +159,11 @@ class LoginActivity : AppCompatActivity() {
                 .build()
         googleSignInClient = GoogleSignIn.getClient(this, googleSignInOption)
         val signInIntent = googleSignInClient.signInIntent
-        startActivityForResult(signInIntent, RC_SIGN_IN)
+        startActivityForResult(signInIntent, rcSignIn)
     }
 
     private fun firebaseUserAuthorizedCheck() {
-        firebaseAuth = FirebaseAuth.getInstance()
-        if (firebaseAuth.currentUser != null) {
+        if (PMAGApp.fAuth.currentUser != null) {
             startActivity(Intent(applicationContext, DashboardActivity::class.java))
         }
     }

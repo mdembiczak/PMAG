@@ -1,4 +1,4 @@
-package com.management.pmag.ui.login
+package com.management.pmag.ui.authorization.login
 
 /**
  * User details post authentication that is exposed to the UI
