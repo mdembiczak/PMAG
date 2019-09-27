@@ -1,21 +1,16 @@
 package com.management.pmag.ui.authorization.login
 
-import android.content.Intent
-import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.management.pmag.PMAGApp
-import com.management.pmag.PMAGApp.Companion.ctx
 import com.management.pmag.data.LoginRepository
 import com.management.pmag.data.Result
 
 import com.management.pmag.R
-import com.management.pmag.data.model.LoggedInUser
+import com.management.pmag.data.model.api.UserModel
 import com.management.pmag.ui.authorization.AuthorizationResult
 import com.management.pmag.ui.authorization.AuthorizationState
 import com.management.pmag.ui.authorization.AuthorizationValidation
-import com.management.pmag.ui.dashboard.DashboardActivity
 
 class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel() {
 
@@ -27,13 +22,14 @@ class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel()
 
     private val authorizationValidation = AuthorizationValidation()
 
-    fun login(username: String, password: String): Result<LoggedInUser> {
+    fun login(username: String, password: String): Result<UserModel> {
         // can be launched in a separate asynchronous job
         val result = loginRepository.login(username, password)
 
         if (result is Result.Success) {
+            val displayName: String = result.data.firstName + " " + result.data.lastName
             _loginResult.value = AuthorizationResult(
-                success = LoggedInUserView(displayName = result.data.displayName)
+                success = LoggedInUserView(displayName = displayName)
             )
         } else {
             _loginResult.value =

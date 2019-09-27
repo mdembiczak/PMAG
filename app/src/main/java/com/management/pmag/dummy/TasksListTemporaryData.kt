@@ -4,12 +4,12 @@ import java.util.ArrayList
 import java.util.HashMap
 
 /**
- * Helper class for providing sample content for userModel interfaces created by
+ * Helper class for providing sample content for user interfaces created by
  * Android template wizards.
  *
  * TODO: Replace all uses of this class before publishing your app.
  */
-object ProjectsListTemporaryData {
+object TasksListTemporaryData {
 
     /**
      * An array of sample (dummy) items.

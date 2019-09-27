@@ -7,9 +7,12 @@ import android.widget.TextView
 import androidx.fragment.app.FragmentTransaction
 import com.management.pmag.ProjectsFragment
 import com.management.pmag.R
+import com.management.pmag.data.api.RestWebService
 import com.management.pmag.dummy.ProjectsListTemporaryData
 
 class DashboardActivity : AppCompatActivity(), ProjectsFragment.OnListFragmentInteractionListener {
+    var restAdapter: RestWebService = RestWebService.Factory.Companion
+
     var fragmentTransaction: FragmentTransaction = supportFragmentManager.beginTransaction()
 
     override fun onListFragmentInteraction(item: ProjectsListTemporaryData.DummyItem?) {

@@ -19,4 +19,6 @@
     <string name="register_activity_or">OR</string>
     <string name="email_hint">Email</string>
     <string name="password_hint">Password</string>
+    <string name="project_textview">Available Projects</string>
+    <string name="tasks_textview">Tasks</string>
 </resources>
