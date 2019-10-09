@@ -3,11 +3,10 @@ package com.management.pmag.ui.authorization.login
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.management.pmag.data.LoginRepository
-import com.management.pmag.data.Result
-
 import com.management.pmag.R
-import com.management.pmag.data.model.api.UserModel
+import com.management.pmag.model.entity.Result
+import com.management.pmag.model.entity.User
+import com.management.pmag.model.repository.LoginRepository
 import com.management.pmag.ui.authorization.AuthorizationResult
 import com.management.pmag.ui.authorization.AuthorizationState
 import com.management.pmag.ui.authorization.AuthorizationValidation
@@ -22,7 +21,7 @@ class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel()
 
     private val authorizationValidation = AuthorizationValidation()
 
-    fun login(username: String, password: String): Result<UserModel> {
+    fun login(username: String, password: String): Result<User> {
         // can be launched in a separate asynchronous job
         val result = loginRepository.login(username, password)
 

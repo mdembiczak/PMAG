@@ -2,8 +2,8 @@ package com.management.pmag.ui.authorization.login
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.management.pmag.data.LoginDataSource
-import com.management.pmag.data.LoginRepository
+import com.management.pmag.controller.login.LoginDataSource
+import com.management.pmag.model.repository.LoginRepository
 
 /**
  * ViewModel provider factory to instantiate LoginViewModel.

@@ -1,11 +1,11 @@
 package com.management.pmag
 
+import android.annotation.SuppressLint
 import android.app.Application
 import android.content.Context
 import android.content.res.Resources
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.database.FirebaseDatabase
 
 /**
  * Singletons
@@ -17,18 +17,16 @@ class PMAGApp : Application() {
         res = resources
         ctx = applicationContext
 
-        fAuth = FirebaseAuth.getInstance()
-        fDatabase = FirebaseDatabase.getInstance()
-
-        fUser = fAuth.currentUser
+        firebaseAuth = FirebaseAuth.getInstance()
+        fUser = firebaseAuth.currentUser
     }
 
     companion object {
+        @SuppressLint("StaticFieldLeak")
         lateinit var ctx: Context
         lateinit var res: Resources
 
-        lateinit var fAuth: FirebaseAuth
-        lateinit var fDatabase: FirebaseDatabase
+        lateinit var firebaseAuth: FirebaseAuth
 
         var fUser: FirebaseUser? = null
     }

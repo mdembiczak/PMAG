@@ -2,11 +2,7 @@ package com.management.pmag.ui.authorization.login
 
 import android.app.Activity
 import android.content.Intent
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
-import androidx.annotation.StringRes
-import androidx.appcompat.app.AppCompatActivity
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
@@ -15,15 +11,18 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ProgressBar
 import android.widget.Toast
+import androidx.annotation.StringRes
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.signin.*
 import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.GoogleAuthProvider
+import com.management.pmag.MainActivity
 import com.management.pmag.PMAGApp
-import com.management.pmag.ui.dashboard.DashboardActivity
-
 import com.management.pmag.R
-import com.management.pmag.data.Result
+import com.management.pmag.model.entity.Result
 import com.management.pmag.ui.authorization.register.RegisterActivity
 
 class LoginActivity : AppCompatActivity() {
@@ -111,7 +110,7 @@ class LoginActivity : AppCompatActivity() {
                 val result =
                     loginViewModel.login(username.text.toString(), password.text.toString())
                 if (result is Result.Success) {
-                    startActivity(Intent(applicationContext, DashboardActivity::class.java))
+                    startActivity(Intent(applicationContext, MainActivity::class.java))
                 }
             }
         }
@@ -140,9 +139,9 @@ class LoginActivity : AppCompatActivity() {
 
     private fun authWithGoogle(account: GoogleSignInAccount) {
         val credential: AuthCredential = GoogleAuthProvider.getCredential(account.idToken, null)
-        PMAGApp.fAuth.signInWithCredential(credential).addOnCompleteListener {
+        PMAGApp.firebaseAuth.signInWithCredential(credential).addOnCompleteListener {
             if (it.isSuccessful) {
-                startActivity(Intent(applicationContext, DashboardActivity::class.java))
+                startActivity(Intent(applicationContext, MainActivity::class.java))
                 finish()
             } else {
                 Toast.makeText(applicationContext, "Auth Error", Toast.LENGTH_SHORT).show()
@@ -163,8 +162,8 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun firebaseUserAuthorizedCheck() {
-        if (PMAGApp.fAuth.currentUser != null) {
-            startActivity(Intent(applicationContext, DashboardActivity::class.java))
+        if (PMAGApp.firebaseAuth.currentUser != null) {
+            startActivity(Intent(applicationContext, MainActivity::class.java))
         }
     }
 

@@ -7,8 +7,8 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.management.pmag.MainActivity
 import com.management.pmag.PMAGApp
-import com.management.pmag.ui.dashboard.DashboardActivity
 import com.management.pmag.R
 
 class RegisterActivity : AppCompatActivity() {
@@ -40,10 +40,10 @@ class RegisterActivity : AppCompatActivity() {
                 Toast.makeText(applicationContext, "Password must be at least 8 characters", Toast.LENGTH_SHORT).show()
             }
 
-            PMAGApp.fAuth.createUserWithEmailAndPassword(email, password)
+            PMAGApp.firebaseAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
-                        startActivity(Intent(applicationContext, DashboardActivity::class.java))
+                        startActivity(Intent(applicationContext, MainActivity::class.java))
                         finish()
                     } else {
                         Toast.makeText(applicationContext, "Email or password is wrong", Toast.LENGTH_SHORT).show()
@@ -51,8 +51,8 @@ class RegisterActivity : AppCompatActivity() {
                 }
         }
 
-        if (PMAGApp.fAuth.currentUser != null) {
-            startActivity(Intent(applicationContext, DashboardActivity::class.java))
+        if (PMAGApp.firebaseAuth.currentUser != null) {
+            startActivity(Intent(applicationContext, MainActivity::class.java))
         }
     }
 }

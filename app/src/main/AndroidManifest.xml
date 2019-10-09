@@ -15,16 +15,15 @@
             android:theme="@style/AppTheme"
             tools:ignore="GoogleAppIndexingWarning">
         <activity
-                android:name="com.management.pmag.ui.authorization.register.RegisterActivity"
+                android:name=".MainActivity"
+                android:label="@string/title_activity_main"
+                android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+                android:name=".ui.authorization.register.RegisterActivity"
                 android:label="@string/title_activity_login"
                 android:screenOrientation="portrait" />
         <activity
-                android:name=".ui.dashboard.DashboardActivity"
-                android:label="@string/title_activity_dashboard"
-                android:screenOrientation="portrait"
-                android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-                android:name="com.management.pmag.ui.authorization.login.LoginActivity"
+                android:name=".ui.authorization.login.LoginActivity"
                 android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
