@@ -35,7 +35,7 @@
 
     <fragment
             android:id="@+id/nav_send"
-            android:name="com.management.pmag.ui.send.SendFragment"
+            android:name="com.management.pmag.ui.project.ProjectFragment"
             android:label="@string/menu_send"
-            tools:layout="@layout/fragment_send" />
+            tools:layout="@layout/fragment_project" />
 </navigation>

@@ -15,7 +15,7 @@ class LoginDataSource {
             PMAGApp.firebaseAuth.signInWithEmailAndPassword(email, password).isSuccessful
 
         //rest request get full user data
-        lateinit var user: User // =???? request do firestone
+        lateinit var user: User // =???? request do firestora
 
         if (successful) {
             val userId = PMAGApp.firebaseAuth.currentUser?.uid.orEmpty()

@@ -1,8 +1,8 @@
 package com.management.pmag.model.entity
 
 data class Project(
-    val projectId: String,
+    val projectTag: String,
     val projectName: String,
     val projectDescription: String,
-    val projectOwnerId: Int
+    val projectOwnerId: String
 )
