@@ -5,7 +5,7 @@ data class Task(
     val projectId: String,
     val title: String,
     val description: String,
-    val ownerId: Long,
+    val taskOwnerId: Int,
     val assignedTo: String,
     val creationData: String,
     val commentsId: String

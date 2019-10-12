@@ -10,8 +10,4 @@ data class User(
     val addressId: String,
     val phoneNumber: String,
     val emailAddress: String
-){
-
-
-
-}
+)
