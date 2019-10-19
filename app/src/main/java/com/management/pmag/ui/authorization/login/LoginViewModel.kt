@@ -22,7 +22,6 @@ class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel()
     private val authorizationValidation = AuthorizationValidation()
 
     fun login(username: String, password: String): Result<User> {
-        // can be launched in a separate asynchronous job
         val result = loginRepository.login(username, password)
 
         if (result is Result.Success) {

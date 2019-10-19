@@ -11,14 +11,17 @@ import java.io.IOException
 class LoginDataSource {
 
     fun login(email: String, password: String): Result<User> {
-        val successful =
-            PMAGApp.firebaseAuth.signInWithEmailAndPassword(email, password).isSuccessful
+        val signInWithEmailAndPassword =
+            PMAGApp.firebaseAuth.signInWithEmailAndPassword(email, password)
 
-        //rest request get full user data
-        lateinit var user: User // =???? request do firestora
+        val currentUser = PMAGApp.firebaseAuth.currentUser
 
-        if (successful) {
-            val userId = PMAGApp.firebaseAuth.currentUser?.uid.orEmpty()
+
+        val uid = PMAGApp.firebaseAuth.currentUser?.uid.orEmpty()
+
+        lateinit var user: User
+
+        if (uid.isNotEmpty()) {
             user = User(
                 "123",
                 "firstName",
@@ -28,7 +31,7 @@ class LoginDataSource {
                 "email"
             )
             val loggedInUser = User(
-                userId,
+                uid,
                 user.firstName,
                 user.lastName,
                 user.addressId,
@@ -41,7 +44,7 @@ class LoginDataSource {
     }
 
     fun logout() {
-        // TODO: revoke authentication
+        PMAGApp.firebaseAuth.signOut()
     }
 }
 

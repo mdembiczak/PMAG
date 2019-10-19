@@ -11,9 +11,12 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
             android:textAlignment="center"
             android:textSize="20sp"
+            app:layout_constraintBottom_toTopOf="@+id/projectNameId"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -21,21 +24,37 @@
             android:id="@+id/projectNameId"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
             android:ems="10"
             android:inputType="textPersonName"
             android:text="Name"
+            app:layout_constraintBottom_toTopOf="@+id/addProjectButtonId"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/text_send" />
 
     <Button
-            android:id="@+id/button"
+            android:id="@+id/addProjectButtonId"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
             android:text="Button"
+            app:layout_constraintBottom_toTopOf="@+id/projectListView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/projectNameId" />
+
+    <ListView
+            android:id="@+id/projectListView"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginBottom="8dp"
+            android:scrollbars="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/addProjectButtonId" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,7 +1,9 @@
 package com.management.pmag
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
+import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
@@ -13,10 +15,14 @@ import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
+import com.management.pmag.controller.login.LoginDataSource
+import com.management.pmag.model.repository.LoginRepository
+import com.management.pmag.ui.authorization.login.LoginActivity
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
+    private val loginRepository: LoginRepository = LoginRepository(dataSource = LoginDataSource())
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,7 +45,7 @@ class MainActivity : AppCompatActivity() {
         appBarConfiguration = AppBarConfiguration(
             setOf(
                 R.id.nav_home, R.id.nav_board, R.id.nav_slideshow,
-                R.id.nav_tools, R.id.nav_share, R.id.nav_send
+                R.id.nav_tools, R.id.nav_share, R.id.nav_project
             ), drawerLayout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
@@ -47,9 +53,19 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        // Inflate the menu; this adads items to the action br if it is present.
         menuInflater.inflate(R.menu.main, menu)
         return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?) = when (item?.itemId) {
+        R.id.action_logout -> {
+            loginRepository.logout()
+            startActivity(Intent(applicationContext, LoginActivity::class.java))
+            true
+        }
+        else -> {
+            super.onOptionsItemSelected(item)
+        }
     }
 
     override fun onSupportNavigateUp(): Boolean {
