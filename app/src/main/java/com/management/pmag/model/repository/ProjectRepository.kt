@@ -5,6 +5,7 @@ import android.util.Log
 import android.widget.Toast
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.QuerySnapshot
 import com.management.pmag.PMAGApp
 import com.management.pmag.model.entity.Project
@@ -47,9 +48,14 @@ class ProjectRepository {
             .addOnFailureListener { Log.e(TAG, "Error with saving project $it") }
     }
 
-    fun loadProjects(): Task<QuerySnapshot> {
+    fun getProjectsByOwnerId(): Query {
         return projectsCollection
             .whereEqualTo("projectOwnerId", PMAGApp.firebaseAuth.currentUser?.uid)
+    }
+
+    fun getProjectByProjectTag(projectTag: String): Task<QuerySnapshot> {
+        return projectsCollection
+            .whereEqualTo("projectTag", projectTag)
             .get()
     }
 
