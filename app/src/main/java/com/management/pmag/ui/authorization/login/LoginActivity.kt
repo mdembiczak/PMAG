@@ -45,7 +45,8 @@ class LoginActivity : AppCompatActivity() {
         val register = findViewById<Button>(R.id.register)
         val signIn = findViewById<Button>(R.id.signInByGoogle)
 
-        loginViewModel = ViewModelProviders.of(this,
+        loginViewModel = ViewModelProviders.of(
+            this,
             LoginViewModelFactory()
         )
             .get(LoginViewModel::class.java)
@@ -79,11 +80,13 @@ class LoginActivity : AppCompatActivity() {
             finish()
         })
 
-        username.afterTextChanged {
-            loginViewModel.loginDataChanged(
-                username.text.toString(),
-                password.text.toString()
-            )
+        username.apply {
+            afterTextChanged {
+                loginViewModel.loginDataChanged(
+                    username.text.toString(),
+                    password.text.toString()
+                )
+            }
         }
 
         password.apply {

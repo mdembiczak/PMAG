@@ -11,7 +11,6 @@ class AuthorizationValidation {
         }
     }
 
-    // A placeholder password validation check
     fun isPasswordValid(password: String): Boolean {
         return password.length > 8
     }

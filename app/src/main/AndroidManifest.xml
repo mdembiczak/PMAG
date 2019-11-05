@@ -14,7 +14,12 @@
             android:supportsRtl="true"
             android:theme="@style/AppTheme"
             tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".ui.project.details.ProjectDetailsActivity"></activity>
+        <activity
+                android:name=".ui.project.common.ProjectCreationActivity"
+                android:windowSoftInputMode="adjustResize" />
+        <activity
+                android:name=".ui.project.common.ProjectDetailsActivity"
+                android:windowSoftInputMode="adjustResize" />
         <activity
                 android:name=".MainActivity"
                 android:label="@string/title_activity_main"

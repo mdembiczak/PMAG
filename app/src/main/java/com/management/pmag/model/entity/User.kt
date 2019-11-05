@@ -9,5 +9,6 @@ data class User(
     val lastName: String,
     val addressId: String,
     val phoneNumber: String,
-    val emailAddress: String
+    val emailAddress: String,
+    val projectContext: String = ""
 )
