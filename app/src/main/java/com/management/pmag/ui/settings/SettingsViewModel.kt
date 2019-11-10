@@ -1,13 +1,13 @@
-package com.management.pmag.ui.tools
+package com.management.pmag.ui.settings
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
-class ToolsViewModel : ViewModel() {
+class SettingsViewModel : ViewModel() {
 
     private val _text = MutableLiveData<String>().apply {
-        value = "This is tools Fragment"
+        value = "User settings"
     }
     val text: LiveData<String> = _text
 }

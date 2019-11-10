@@ -14,9 +14,15 @@ class ProjectRepository {
     private val projectPath = "projects"
     private var projectsCollection = FirebaseFirestore.getInstance().collection(projectPath)
 
+    private val projectStatusFieldName = "projectStatus"
+    private val projectTagFieldName = "projectTag"
+    private val projectOwnerIdFieldName = "projectOwnerId"
+    private val projectNameFieldName = "projectName"
+    private val projectDescriptionFieldName = "projectDescription"
+
     fun saveProject(project: Project) {
         projectsCollection
-            .whereEqualTo("projectTag", project.projectTag)
+            .whereEqualTo(projectTagFieldName, project.projectTag)
             .get()
             .addOnSuccessListener { result ->
                 val projectList = result.toObjects(Project::class.java)
@@ -50,14 +56,26 @@ class ProjectRepository {
 
     fun getProjectsByOwnerId(): Query {
         return projectsCollection
-            .whereEqualTo("projectOwnerId", PMAGApp.firebaseAuth.currentUser?.uid)
+            .whereEqualTo(projectOwnerIdFieldName, PMAGApp.firebaseAuth.currentUser?.uid)
     }
 
     fun getProjectByProjectTag(projectTag: String): Task<QuerySnapshot> {
         return projectsCollection
-            .whereEqualTo("projectTag", projectTag)
+            .whereEqualTo(projectTagFieldName, projectTag)
             .get()
     }
 
-
+    fun updateProject(
+        projectTag: String, projectName: String, projectState: String, projectDescription: String
+    ) {
+        getProjectByProjectTag(projectTag)
+            .addOnSuccessListener { query ->
+                val documentId = query.documents.first().id
+                projectsCollection.document(documentId).update(
+                    projectNameFieldName, projectName,
+                    projectStatusFieldName, projectState,
+                    projectDescriptionFieldName, projectDescription
+                )
+            }
+    }
 }

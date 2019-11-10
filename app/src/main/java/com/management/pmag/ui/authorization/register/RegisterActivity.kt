@@ -10,12 +10,16 @@ import androidx.appcompat.app.AppCompatActivity
 import com.management.pmag.MainActivity
 import com.management.pmag.PMAGApp
 import com.management.pmag.R
+import com.management.pmag.model.entity.User
+import com.management.pmag.model.repository.UserRepository
 
 class RegisterActivity : AppCompatActivity() {
 
     lateinit var email: EditText
     lateinit var password: EditText
     lateinit var signUp: Button
+
+    val userRepository = UserRepository()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,6 +47,12 @@ class RegisterActivity : AppCompatActivity() {
             PMAGApp.firebaseAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
+                        userRepository.saveUser(
+                            User(
+                                emailAddress = email,
+                                userId = PMAGApp.fUser?.uid.toString()
+                            )
+                        )
                         startActivity(Intent(applicationContext, MainActivity::class.java))
                         finish()
                     } else {

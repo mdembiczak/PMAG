@@ -83,4 +83,25 @@
             app:layout_constraintStart_toStartOf="@+id/staticProjectTagId"
             app:layout_constraintTop_toBottomOf="@+id/staticProjectTagId" />
 
+    <Button
+            android:id="@+id/saveButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/save_name"
+            app:layout_constraintEnd_toEndOf="@+id/ProjectDescriptionTextInputLayout"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintStart_toStartOf="@+id/ProjectDescriptionTextInputLayout"
+            app:layout_constraintTop_toBottomOf="@+id/ProjectDescriptionTextInputLayout" />
+
+    <Button
+            android:id="@+id/setProjectAsDefaultId"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/set_as_default"
+            app:layout_constraintEnd_toEndOf="@+id/saveButton"
+            app:layout_constraintStart_toStartOf="@+id/saveButton"
+            app:layout_constraintTop_toBottomOf="@+id/saveButton" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -55,22 +55,27 @@ class ProjectFragment : Fragment() {
         projectViewModel =
             ViewModelProviders.of(this).get(ProjectViewModel::class.java)
 
+        onClickProjectListItem()
+
+        projectViewModel.text.observe(this, Observer {
+            textView.text = it
+        })
+        return root
+    }
+
+    private fun onClickProjectListItem() {
         projectListView.setOnItemClickListener { _, view, _, _ ->
             val projectTagTextView: TextView = view.findViewById(R.id.label)
             val projectTag = projectTagTextView.text.toString()
             projectRepository.getProjectByProjectTag(projectTag = projectTag)
                 .addOnSuccessListener { result ->
+
                     val project = result.toObjects(Project::class.java).first()
                     val projectDetailsIntent = Intent(context, ProjectDetailsActivity::class.java)
                     projectDetailsIntent.putExtra(projectExtra, project)
                     startActivity(projectDetailsIntent)
                 }
         }
-
-        projectViewModel.text.observe(this, Observer {
-            textView.text = it
-        })
-        return root
     }
 
     private fun loadProjectsToProjectListView(projectListView: ListView) {

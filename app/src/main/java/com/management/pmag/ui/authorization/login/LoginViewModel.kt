@@ -3,10 +3,12 @@ package com.management.pmag.ui.authorization.login
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.management.pmag.PMAGApp
 import com.management.pmag.R
 import com.management.pmag.model.entity.Result
 import com.management.pmag.model.entity.User
 import com.management.pmag.model.repository.LoginRepository
+import com.management.pmag.model.repository.UserRepository
 import com.management.pmag.ui.authorization.AuthorizationResult
 import com.management.pmag.ui.authorization.AuthorizationState
 import com.management.pmag.ui.authorization.AuthorizationValidation
@@ -20,15 +22,19 @@ class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel()
     val loginFormResult: LiveData<AuthorizationResult> = _loginResult
 
     private val authorizationValidation = AuthorizationValidation()
+    private val userRepository = UserRepository()
 
     fun login(username: String, password: String): Result<User> {
         val result = loginRepository.login(username, password)
 
         if (result is Result.Success) {
-            val displayName: String = result.data.firstName + " " + result.data.lastName
-            _loginResult.value = AuthorizationResult(
-                success = LoggedInUserView(displayName = displayName)
-            )
+            userRepository.getUser(PMAGApp.fUser?.email).addOnSuccessListener {
+                val user = it.toObjects(User::class.java).first()
+                val displayName: String = user.firstName + " " + user.lastName
+                _loginResult.value = AuthorizationResult(
+                    success = LoggedInUserView(displayName = displayName)
+                )
+            }
         } else {
             _loginResult.value =
                 AuthorizationResult(error = R.string.login_failed)

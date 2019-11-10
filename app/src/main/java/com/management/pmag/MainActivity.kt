@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
@@ -14,13 +15,16 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.navigation.NavigationView
 import com.management.pmag.controller.login.LoginDataSource
+import com.management.pmag.model.entity.User
 import com.management.pmag.model.repository.LoginRepository
+import com.management.pmag.model.repository.UserRepository
 import com.management.pmag.ui.authorization.login.LoginActivity
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private val loginRepository: LoginRepository = LoginRepository(dataSource = LoginDataSource())
+    private val userRepository: UserRepository = UserRepository()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,18 +35,34 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
 
         val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
+        //SET VALUES TO FIELDS
         val navView: NavigationView = findViewById(R.id.nav_view)
+
         val navController = findNavController(R.id.nav_host_fragment)
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.nav_home, R.id.nav_board, R.id.nav_slideshow,
-                R.id.nav_tools, R.id.nav_share, R.id.nav_project
+                R.id.nav_home, R.id.nav_board, R.id.nav_task,
+                R.id.nav_settings, R.id.nav_share, R.id.nav_project
             ), drawerLayout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+        initializeNavView(navView)
+    }
+
+    private fun initializeNavView(navView: NavigationView) {
+        val headerView = navView.getHeaderView(0)
+        val emailTextView = headerView.findViewById<TextView>(R.id.emailAddressTextView)
+        val fullNameText = headerView.findViewById<TextView>(R.id.fullNameTextViewId)
+        val userQuery = userRepository.getUser(PMAGApp.fUser?.email)
+        userQuery.addOnSuccessListener { result ->
+            val user = result.toObjects(User::class.java).first()
+            emailTextView.text = user?.emailAddress.orEmpty()
+            val fullName = user?.firstName + " " + user?.lastName
+            fullNameText.text = fullName
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

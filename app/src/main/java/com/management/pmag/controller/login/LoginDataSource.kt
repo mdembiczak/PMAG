@@ -11,34 +11,11 @@ import java.io.IOException
 class LoginDataSource {
 
     fun login(email: String, password: String): Result<User> {
-        val signInWithEmailAndPassword =
-            PMAGApp.firebaseAuth.signInWithEmailAndPassword(email, password)
+        PMAGApp.firebaseAuth.signInWithEmailAndPassword(email, password)
+        val firebaseUser = PMAGApp.fUser
 
-        val currentUser = PMAGApp.firebaseAuth.currentUser
-
-
-        val uid = PMAGApp.firebaseAuth.currentUser?.uid.orEmpty()
-
-        lateinit var user: User
-
-        if (uid.isNotEmpty()) {
-            user = User(
-                "123",
-                "firstName",
-                "lastName",
-                "address",
-                "phoneNumber",
-                "email"
-            )
-            val loggedInUser = User(
-                uid,
-                user.firstName,
-                user.lastName,
-                user.addressId,
-                user.phoneNumber,
-                user.phoneNumber
-            )
-            return Result.Success(loggedInUser)
+        if (PMAGApp.fUser != null) {
+            return Result.Success(User())
         }
         return Result.Error(IOException("Error logging in"))
     }
