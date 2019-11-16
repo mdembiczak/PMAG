@@ -26,7 +26,8 @@ import java.util.stream.Collectors
 
 class ProjectFragment : Fragment() {
 
-    private lateinit var projectListView: ListView
+    private lateinit var ownedProjectListView: ListView
+    private lateinit var assignedProjectListView: ListView
     private lateinit var projectViewModel: ProjectViewModel
     private lateinit var notAssignedToProject: TextView
     private lateinit var addProjectFloatingButton: FloatingActionButton
@@ -34,6 +35,8 @@ class ProjectFragment : Fragment() {
 
     private val projectExtra = "PROJECT"
     private val emptyString = ""
+    private lateinit var ownedProjectAdapter: ArrayAdapter<String>
+    private lateinit var assignedProjectAdapter: ArrayAdapter<String>
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -44,8 +47,14 @@ class ProjectFragment : Fragment() {
         val textView: TextView = root.findViewById(R.id.text_send)
         notAssignedToProject = root.findViewById(R.id.notAssignToProject)
 
-        projectListView = root.findViewById(R.id.projectListView)
-        loadProjectsToProjectListView(projectListView)
+        ownedProjectListView = root.findViewById(R.id.ownedProjectListView)
+        assignedProjectListView = root.findViewById(R.id.assignedProjectListView)
+        //add second list for user which are not project owners
+
+        onClickProjectListItem()
+        loadProjectsToOwnedProjectListView(ownedProjectListView)
+        loadProjectsToAssignedProjectListView(assignedProjectListView)
+
 
         addProjectFloatingButton = root.findViewById(R.id.addProjectFloatingButton)
         addProjectFloatingButton.setOnClickListener {
@@ -55,7 +64,6 @@ class ProjectFragment : Fragment() {
         projectViewModel =
             ViewModelProviders.of(this).get(ProjectViewModel::class.java)
 
-        onClickProjectListItem()
 
         projectViewModel.text.observe(this, Observer {
             textView.text = it
@@ -64,49 +72,72 @@ class ProjectFragment : Fragment() {
     }
 
     private fun onClickProjectListItem() {
-        projectListView.setOnItemClickListener { _, view, _, _ ->
+        ownedProjectListView.setOnItemClickListener { _, view, _, _ ->
             val projectTagTextView: TextView = view.findViewById(R.id.label)
             val projectTag = projectTagTextView.text.toString()
-            projectRepository.getProjectByProjectTag(projectTag = projectTag)
+            projectRepository.getProjectByProjectTag(projectTag)
                 .addOnSuccessListener { result ->
-
                     val project = result.toObjects(Project::class.java).first()
-                    val projectDetailsIntent = Intent(context, ProjectDetailsActivity::class.java)
-                    projectDetailsIntent.putExtra(projectExtra, project)
-                    startActivity(projectDetailsIntent)
+                    if (project.projectOwnerId == PMAGApp.firebaseAuth.currentUser?.uid) {
+                        val projectDetailsIntent =
+                            Intent(context, ProjectDetailsActivity::class.java)
+                        projectDetailsIntent.putExtra(projectExtra, project)
+                        startActivity(projectDetailsIntent)
+                    } else {
+//                        val projectDetailsReadOnlyIntent =
+//                            Intent(context, ProjectDetailsReadOnlyActivity::class.java)
+//                        projectDetailsReadOnlyIntent.putExtra(projectExtra, project)
+//                        startActivity(projectDetailsReadOnlyIntent)
+                    }
                 }
         }
     }
 
-    private fun loadProjectsToProjectListView(projectListView: ListView) {
+    private fun loadProjectsToOwnedProjectListView(ownedProjectListView: ListView) {
         projectRepository.getProjectsByOwnerId()
             .addSnapshotListener { snapshot, exception ->
-                updateProjectListView(exception, snapshot, projectListView)
+                val projects = updateProjectListView(exception, snapshot, "Owned project List")
+                if (projects.isNotEmpty()) {
+                    Log.d(TAG, "User has projects as owner")
+                    ownedProjectAdapter = ArrayAdapter(PMAGApp.ctx, R.layout.project_list_item)
+                    ownedProjectAdapter.addAll(projects)
+                    ownedProjectListView.adapter = ownedProjectAdapter
+                }
+            }
+    }
+
+
+    private fun loadProjectsToAssignedProjectListView(assignedProjectListView: ListView) {
+        projectRepository.getProjectByUserEmail()
+            .addSnapshotListener { snapshot, exception ->
+                val projects = updateProjectListView(exception, snapshot, "Assigned Project List")
+                if (projects.isNotEmpty()) {
+                    Log.d(TAG, "User has assigned projects")
+                    assignedProjectAdapter = ArrayAdapter(PMAGApp.ctx, R.layout.project_list_item)
+                    assignedProjectAdapter.addAll(projects)
+                    assignedProjectListView.adapter = assignedProjectAdapter
+                }
             }
     }
 
     private fun updateProjectListView(
         exception: FirebaseFirestoreException?,
         snapshot: QuerySnapshot?,
-        projectListView: ListView
-    ) {
+        methodInfo: String
+    ): List<String> {
         if (exception != null) {
             Log.w(TAG, "Listen failed", exception)
-            return
+            return emptyList()
         }
         if (snapshot!!.isEmpty) {
-            Log.e(TAG, "Project list is empty.")
-            notAssignedToProject.text = "You are not assign to project"
+            Log.d(TAG, "INFO: $methodInfo is empty")
         } else {
             notAssignedToProject.text = emptyString
             val projectList = snapshot.toObjects(Project::class.java)
-            val projectTagList = projectList.stream().map { project ->
+            return projectList.stream().map { project ->
                 project.projectTag
             }.collect(Collectors.toList())
-
-            val adapter =
-                ArrayAdapter(PMAGApp.ctx, R.layout.project_list_item, projectTagList)
-            projectListView.adapter = adapter
         }
+        return emptyList()
     }
 }

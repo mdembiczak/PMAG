@@ -8,6 +8,7 @@ data class Project(
     val projectDescription: String = "",
     val projectStatus: String = "",
     val createdBy: String = "",
-    val projectOwnerId: String = ""
+    val projectOwnerId: String = "",
+    val projectUsers: List<String> = emptyList()
 ) : Serializable
 

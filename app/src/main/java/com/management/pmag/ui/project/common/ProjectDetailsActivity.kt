@@ -1,10 +1,9 @@
 package com.management.pmag.ui.project.common
 
+import android.content.ContentValues.TAG
 import android.os.Bundle
-import android.widget.ArrayAdapter
-import android.widget.Button
-import android.widget.Spinner
-import android.widget.TextView
+import android.util.Log
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.textfield.TextInputLayout
 import com.management.pmag.PMAGApp
@@ -23,15 +22,18 @@ class ProjectDetailsActivity : AppCompatActivity() {
     private lateinit var projectDescription: TextInputLayout
     private lateinit var saveProjectButton: Button
     private lateinit var setProjectAsDefaultButton: Button
+    private lateinit var addProjectUserButton: Button
+    private lateinit var projectUser: TextInputLayout
+
+    private val projectRepository = ProjectRepository()
+    private val userRepository = UserRepository()
 
     private val projectTagStaticText = "Project TAG: "
+    private val emptyValue = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_project_details)
-
-        val userRepository = UserRepository()
-        val projectRepository = ProjectRepository()
 
         projectTag = findViewById(R.id.staticProjectTagId)
         projectOwner = findViewById(R.id.projectOwnerTextView)
@@ -40,6 +42,8 @@ class ProjectDetailsActivity : AppCompatActivity() {
         projectDescription = findViewById(R.id.ProjectDescriptionTextInputLayout)
         saveProjectButton = findViewById(R.id.saveButton)
         setProjectAsDefaultButton = findViewById(R.id.setProjectAsDefaultId)
+        addProjectUserButton = findViewById(R.id.addUserButton)
+        projectUser = findViewById(R.id.userEmailAddressTextInputLayout)
 
 
         val project = intent.getSerializableExtra("PROJECT") as Project?
@@ -47,26 +51,17 @@ class ProjectDetailsActivity : AppCompatActivity() {
 
         val fullProjectTagDescription = projectTagStaticText + project?.projectTag
         projectTag.text = fullProjectTagDescription
-        userRepository.getUser(PMAGApp.fUser?.email).addOnSuccessListener { result ->
-            val user = result.toObjects(User::class.java).first()
-            projectOwner.text = user.emailAddress
-        }
+        userRepository.getUser(PMAGApp.firebaseAuth.currentUser?.email)
+            .addOnSuccessListener { result ->
+                val user = result.toObjects(User::class.java).first()
+                projectOwner.text = user.emailAddress
+            }
         projectName.editText?.setText(project?.projectName)
         projectDescription.editText?.setText(project?.projectDescription)
 
-        saveProjectButton.setOnClickListener {
-            projectRepository.updateProject(
-                project!!.projectTag,
-                projectName.editText?.text.toString(),
-                projectStateSpinner.selectedItem.toString(),
-                projectDescription.editText?.text.toString()
-            )
-            finish()
-        }
-
-        setProjectAsDefaultButton.setOnClickListener {
-            userRepository.updateProjectContext(PMAGApp.fUser?.email, project!!.projectTag)
-        }
+        saveProjectOnClickListener(project)
+        setProjectAsDefaultOnClickListener(project)
+        addProjectUserOnClickListener(project!!.projectTag)
     }
 
     private fun initializeProjectStateSpinner(
@@ -84,6 +79,49 @@ class ProjectDetailsActivity : AppCompatActivity() {
                 val position = adapter.getPosition(state)
                 projectStateSpinner.setSelection(position)
             }
+        }
+    }
+
+    private fun saveProjectOnClickListener(project: Project?) {
+        saveProjectButton.setOnClickListener {
+            projectRepository.updateProject(
+                project!!.projectTag,
+                projectName.editText?.text.toString(),
+                projectStateSpinner.selectedItem.toString(),
+                projectDescription.editText?.text.toString()
+            )
+            finish()
+        }
+    }
+
+    private fun setProjectAsDefaultOnClickListener(project: Project?) {
+        setProjectAsDefaultButton.setOnClickListener {
+            userRepository.updateProjectContext(
+                PMAGApp.firebaseAuth.currentUser?.email,
+                project!!.projectTag
+            )
+        }
+    }
+
+    private fun addProjectUserOnClickListener(projectTag: String) {
+        addProjectUserButton.setOnClickListener {
+            projectUser.editText?.text?.let { email ->
+                userRepository.getUser(email.toString())
+                    .addOnSuccessListener { query ->
+                        if (query.isEmpty) {
+                            Log.e(TAG, "User not with email: $email exist")
+                        } else {
+                            Log.d(TAG, "User with email $email exist")
+                            projectRepository.updateProjectUser(projectTag, email.toString())
+                            Toast.makeText(PMAGApp.ctx, "User added to project", Toast.LENGTH_SHORT)
+                                .show()
+                        }
+                    }
+                    .addOnFailureListener { e ->
+                        Log.e(TAG, "ERROR: $e")
+                    }
+            }
+            projectUser.editText?.setText(emptyValue)
         }
     }
 }

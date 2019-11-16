@@ -4,6 +4,7 @@ import android.content.ContentValues.TAG
 import android.util.Log
 import android.widget.Toast
 import com.google.android.gms.tasks.Task
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.QuerySnapshot
@@ -19,6 +20,8 @@ class ProjectRepository {
     private val projectOwnerIdFieldName = "projectOwnerId"
     private val projectNameFieldName = "projectName"
     private val projectDescriptionFieldName = "projectDescription"
+    private val projectUsersFieldName = "projectUsers"
+
 
     fun saveProject(project: Project) {
         projectsCollection
@@ -65,17 +68,43 @@ class ProjectRepository {
             .get()
     }
 
+    fun getProjectByUserEmail(): Query {
+        return projectsCollection
+            .whereArrayContains(
+                projectUsersFieldName,
+                PMAGApp.firebaseAuth.currentUser?.email.toString()
+            )
+    }
+
     fun updateProject(
         projectTag: String, projectName: String, projectState: String, projectDescription: String
     ) {
         getProjectByProjectTag(projectTag)
-            .addOnSuccessListener { query ->
-                val documentId = query.documents.first().id
+            .addOnSuccessListener {
+                Log.d(TAG, "Project id: $projectTag updated")
+                val documentId = it.documents.first().id
                 projectsCollection.document(documentId).update(
                     projectNameFieldName, projectName,
                     projectStatusFieldName, projectState,
                     projectDescriptionFieldName, projectDescription
                 )
+            }
+            .addOnFailureListener {
+                Log.e(TAG, it.toString())
+            }
+    }
+
+    fun updateProjectUser(projectTag: String, email: String) {
+        getProjectByProjectTag(projectTag)
+            .addOnSuccessListener {
+                Log.d(TAG, "Project users updated for projectTag: $projectTag")
+                val documentId = it.documents.first().id
+                projectsCollection
+                    .document(documentId)
+                    .update(projectUsersFieldName, FieldValue.arrayUnion(email))
+            }
+            .addOnFailureListener {
+                Log.e(TAG, it.toString())
             }
     }
 }

@@ -52,7 +52,7 @@ class SettingsFragment : Fragment() {
         validateUserDetailsField()
         saveUserDetailsButton.setOnClickListener {
             userRepository.updateUserDetails(
-                PMAGApp.fUser?.email,
+                PMAGApp.firebaseAuth.currentUser?.email,
                 firstNameInputLayout.editText?.text.toString(),
                 lastNameInputLayout.editText?.text.toString(),
                 phoneNumberInputLayout.editText?.text.toString(),
@@ -77,7 +77,7 @@ class SettingsFragment : Fragment() {
     }
 
     private fun fillExistingUserData() {
-        userRepository.getUser(PMAGApp.fUser?.email)
+        userRepository.getUser(PMAGApp.firebaseAuth.currentUser?.email)
             .addOnSuccessListener {
                 val user = it.toObjects(User::class.java).first()
                 emailAddressTextView.text = user.emailAddress

@@ -1,12 +1,13 @@
 package com.management.pmag.ui.authorization.login
 
 import android.app.Activity
+import android.content.ContentValues
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
-import android.view.inputmethod.EditorInfo
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ProgressBar
@@ -22,7 +23,8 @@ import com.google.firebase.auth.GoogleAuthProvider
 import com.management.pmag.MainActivity
 import com.management.pmag.PMAGApp
 import com.management.pmag.R
-import com.management.pmag.model.entity.Result
+import com.management.pmag.model.entity.User
+import com.management.pmag.model.repository.UserRepository
 import com.management.pmag.ui.authorization.register.RegisterActivity
 
 class LoginActivity : AppCompatActivity() {
@@ -31,6 +33,7 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var googleSignInClient: GoogleSignInClient
     private val rcSignIn = 9001
 
+    private val userRepository = UserRepository()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -75,8 +78,6 @@ class LoginActivity : AppCompatActivity() {
                 updateUiWithUser(loginResult.success)
             }
             setResult(Activity.RESULT_OK)
-
-            //Complete and destroy login activity once successful
             finish()
         })
 
@@ -96,37 +97,19 @@ class LoginActivity : AppCompatActivity() {
                     password.text.toString()
                 )
             }
-
-            setOnEditorActionListener { _, actionId, _ ->
-                when (actionId) {
-                    EditorInfo.IME_ACTION_DONE ->
-                        loginViewModel.login(
-                            username.text.toString(),
-                            password.text.toString()
-                        )
-                }
-                false
-            }
-
-            login.setOnClickListener {
-                loading.visibility = View.VISIBLE
-                val result =
-                    loginViewModel.login(username.text.toString(), password.text.toString())
-                if (result is Result.Success) {
-                    startActivity(Intent(applicationContext, MainActivity::class.java))
-                }
-            }
         }
 
+        loginButtonOnClickListener(login, username, password)
         register.setOnClickListener {
-            startActivity(Intent(applicationContext, RegisterActivity::class.java))
+            startActivity(
+                Intent(
+                    applicationContext,
+                    RegisterActivity::class.java
+                )
+            )
         }
-
-        signIn.setOnClickListener {
-            googleSignIn()
-        }
+        signIn.setOnClickListener { googleSignIn() }
     }
-
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -138,6 +121,37 @@ class LoginActivity : AppCompatActivity() {
             }
         }
 
+    }
+
+
+    private fun loginButtonOnClickListener(
+        login: Button,
+        username: EditText,
+        password: EditText
+    ) {
+        login.setOnClickListener {
+            PMAGApp.firebaseAuth.signInWithEmailAndPassword(
+                username.text.toString(),
+                password.text.toString()
+            )
+                .addOnSuccessListener {
+                    Log.d(
+                        ContentValues.TAG,
+                        "Logged user async: " + PMAGApp.firebaseAuth.currentUser?.email.orEmpty()
+                    )
+                    userRepository.getUser(PMAGApp.firebaseAuth.currentUser?.email)
+                        .addOnSuccessListener {
+                            val user = it.toObjects(User::class.java).first()
+                            val displayName: String = user.firstName + " " + user.lastName
+                            Toast.makeText(
+                                PMAGApp.ctx,
+                                "Welcome: $displayName",
+                                Toast.LENGTH_LONG
+                            ).show()
+                            startActivity(Intent(PMAGApp.ctx, MainActivity::class.java))
+                        }
+                }
+        }
     }
 
     private fun authWithGoogle(account: GoogleSignInAccount) {

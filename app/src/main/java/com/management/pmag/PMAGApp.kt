@@ -1,6 +1,5 @@
 package com.management.pmag
 
-import android.annotation.SuppressLint
 import android.app.Application
 import android.content.Context
 import android.content.res.Resources
@@ -22,7 +21,6 @@ class PMAGApp : Application() {
     }
 
     companion object {
-        @SuppressLint("StaticFieldLeak")
         lateinit var ctx: Context
         lateinit var res: Resources
 

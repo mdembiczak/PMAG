@@ -14,6 +14,7 @@
             android:supportsRtl="true"
             android:theme="@style/AppTheme"
             tools:ignore="GoogleAppIndexingWarning">
+        <activity android:name=".ui.slideshow.common.TaskCreationActivity"></activity>
         <activity
                 android:name=".ui.project.common.ProjectCreationActivity"
                 android:windowSoftInputMode="adjustResize" />

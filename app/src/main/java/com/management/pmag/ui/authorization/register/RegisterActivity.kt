@@ -35,13 +35,25 @@ class RegisterActivity : AppCompatActivity() {
             val password: String = password.text.toString()
 
             if (TextUtils.isEmpty(email)) {
-                Toast.makeText(applicationContext, "Please fill in the required fields", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    applicationContext,
+                    "Please fill in the required fields",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
             if (TextUtils.isEmpty(password)) {
-                Toast.makeText(applicationContext, "Please fill in the required fields", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    applicationContext,
+                    "Please fill in the required fields",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
             if (password.length < 8) {
-                Toast.makeText(applicationContext, "Password must be at least 8 characters", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    applicationContext,
+                    "Password must be at least 8 characters",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
 
             PMAGApp.firebaseAuth.createUserWithEmailAndPassword(email, password)
@@ -50,13 +62,17 @@ class RegisterActivity : AppCompatActivity() {
                         userRepository.saveUser(
                             User(
                                 emailAddress = email,
-                                userId = PMAGApp.fUser?.uid.toString()
+                                userId = PMAGApp.firebaseAuth.currentUser?.uid.toString()
                             )
                         )
                         startActivity(Intent(applicationContext, MainActivity::class.java))
                         finish()
                     } else {
-                        Toast.makeText(applicationContext, "Email or password is wrong", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            applicationContext,
+                            "Email or password is wrong",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
                 }
         }

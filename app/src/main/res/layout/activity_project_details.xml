@@ -1,107 +1,137 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".ui.project.common.ProjectDetailsActivity">
+        android:layout_height="match_parent">
 
-
-    <TextView
-            android:id="@+id/staticProjectTagId"
-            android:layout_width="0dp"
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="32dp"
-            android:layout_marginEnd="16dp"
-            android:clickable="false"
-            android:ems="10"
-            android:textAlignment="center"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.497"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            tools:context=".ui.project.common.ProjectDetailsActivity">
 
-    <Spinner
-            android:id="@+id/projectStateSpinner"
-            android:layout_width="0dp"
-            android:layout_height="25dp"
-            android:layout_marginTop="16dp"
-            app:layout_constraintEnd_toEndOf="@+id/projectNameTextInputLayout"
-            app:layout_constraintHorizontal_bias="0.496"
-            app:layout_constraintStart_toStartOf="@+id/projectNameTextInputLayout"
-            app:layout_constraintTop_toBottomOf="@+id/projectNameTextInputLayout" />
+        <TextView
+                android:id="@+id/staticProjectTagId"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="32dp"
+                android:layout_marginEnd="16dp"
+                android:clickable="false"
+                android:ems="10"
+                android:textAlignment="center"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.497"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-    <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/projectNameTextInputLayout"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:hint="@string/hint_set_project_name"
-            app:hintAnimationEnabled="true"
-            app:hintEnabled="true"
-            app:layout_constraintEnd_toEndOf="@+id/projectOwnerTextView"
-            app:layout_constraintStart_toStartOf="@+id/projectOwnerTextView"
-            app:layout_constraintTop_toBottomOf="@+id/projectOwnerTextView">
+        <Spinner
+                android:id="@+id/projectStateSpinner"
+                android:layout_width="0dp"
+                android:layout_height="25dp"
+                android:layout_marginTop="16dp"
+                app:layout_constraintEnd_toEndOf="@+id/projectNameTextInputLayout"
+                app:layout_constraintHorizontal_bias="0.496"
+                app:layout_constraintStart_toStartOf="@+id/projectNameTextInputLayout"
+                app:layout_constraintTop_toBottomOf="@+id/projectNameTextInputLayout" />
 
-        <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/projectNameTextInput"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-    </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/projectNameTextInputLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:hint="@string/hint_set_project_name"
+                app:hintAnimationEnabled="true"
+                app:hintEnabled="true"
+                app:layout_constraintEnd_toEndOf="@+id/projectOwnerTextView"
+                app:layout_constraintStart_toStartOf="@+id/projectOwnerTextView"
+                app:layout_constraintTop_toBottomOf="@+id/projectOwnerTextView">
 
-    <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/ProjectDescriptionTextInputLayout"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:hint="@string/project_description"
-            app:hintAnimationEnabled="true"
-            app:hintEnabled="true"
-            app:layout_constraintEnd_toEndOf="@+id/projectStateSpinner"
-            app:layout_constraintStart_toStartOf="@+id/projectStateSpinner"
-            app:layout_constraintTop_toBottomOf="@+id/projectStateSpinner">
+            <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/projectNameTextInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/projectDescriptionTextInput"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-    </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/ProjectDescriptionTextInputLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:hint="@string/project_description"
+                app:hintAnimationEnabled="true"
+                app:hintEnabled="true"
+                app:layout_constraintEnd_toEndOf="@+id/projectStateSpinner"
+                app:layout_constraintStart_toStartOf="@+id/projectStateSpinner"
+                app:layout_constraintTop_toBottomOf="@+id/projectStateSpinner">
 
-    <TextView
-            android:id="@+id/projectOwnerTextView"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:textSize="18sp"
-            app:layout_constraintEnd_toEndOf="@+id/staticProjectTagId"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="@+id/staticProjectTagId"
-            app:layout_constraintTop_toBottomOf="@+id/staticProjectTagId" />
+            <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/projectDescriptionTextInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-    <Button
-            android:id="@+id/saveButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="@string/save_name"
-            app:layout_constraintEnd_toEndOf="@+id/ProjectDescriptionTextInputLayout"
-            app:layout_constraintHorizontal_bias="0.498"
-            app:layout_constraintStart_toStartOf="@+id/ProjectDescriptionTextInputLayout"
-            app:layout_constraintTop_toBottomOf="@+id/ProjectDescriptionTextInputLayout" />
+        <TextView
+                android:id="@+id/projectOwnerTextView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="@+id/staticProjectTagId"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@+id/staticProjectTagId"
+                app:layout_constraintTop_toBottomOf="@+id/staticProjectTagId" />
 
-    <Button
-            android:id="@+id/setProjectAsDefaultId"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="@string/set_as_default"
-            app:layout_constraintEnd_toEndOf="@+id/saveButton"
-            app:layout_constraintStart_toStartOf="@+id/saveButton"
-            app:layout_constraintTop_toBottomOf="@+id/saveButton" />
+        <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/userEmailAddressTextInputLayout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                app:layout_constraintEnd_toStartOf="@+id/addUserButton"
+                app:layout_constraintStart_toStartOf="@+id/ProjectDescriptionTextInputLayout"
+                app:layout_constraintTop_toBottomOf="@+id/ProjectDescriptionTextInputLayout">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+            <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/email_address_user_to_add" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <Button
+                android:id="@+id/addUserButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/add_button"
+                app:layout_constraintEnd_toEndOf="@+id/ProjectDescriptionTextInputLayout"
+                app:layout_constraintTop_toBottomOf="@+id/ProjectDescriptionTextInputLayout" />
+
+        <Button
+                android:id="@+id/saveButton"
+                style="Button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:text="@string/save_name"
+                app:layout_constraintEnd_toEndOf="@+id/ProjectDescriptionTextInputLayout"
+                app:layout_constraintHorizontal_bias="0.498"
+                app:layout_constraintStart_toStartOf="@+id/ProjectDescriptionTextInputLayout"
+                app:layout_constraintTop_toBottomOf="@+id/addUserButton" />
+
+        <Button
+                android:id="@+id/setProjectAsDefaultId"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/set_as_default"
+                app:layout_constraintEnd_toEndOf="@+id/saveButton"
+                app:layout_constraintStart_toStartOf="@+id/saveButton"
+                app:layout_constraintTop_toBottomOf="@+id/saveButton" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

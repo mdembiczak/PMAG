@@ -35,12 +35,9 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
 
         val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
-        //SET VALUES TO FIELDS
         val navView: NavigationView = findViewById(R.id.nav_view)
 
         val navController = findNavController(R.id.nav_host_fragment)
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
         appBarConfiguration = AppBarConfiguration(
             setOf(
                 R.id.nav_home, R.id.nav_board, R.id.nav_task,
@@ -56,13 +53,14 @@ class MainActivity : AppCompatActivity() {
         val headerView = navView.getHeaderView(0)
         val emailTextView = headerView.findViewById<TextView>(R.id.emailAddressTextView)
         val fullNameText = headerView.findViewById<TextView>(R.id.fullNameTextViewId)
-        val userQuery = userRepository.getUser(PMAGApp.fUser?.email)
-        userQuery.addOnSuccessListener { result ->
-            val user = result.toObjects(User::class.java).first()
-            emailTextView.text = user?.emailAddress.orEmpty()
-            val fullName = user?.firstName + " " + user?.lastName
-            fullNameText.text = fullName
-        }
+
+        userRepository.getUserQuery(PMAGApp.firebaseAuth.currentUser?.email)
+            .addSnapshotListener { snapshot, _ ->
+                val user = snapshot?.toObjects(User::class.java)?.first()
+                emailTextView.text = user?.emailAddress.orEmpty()
+                val fullName = user?.firstName + " " + user?.lastName
+                fullNameText.text = fullName
+            }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

@@ -31,7 +31,7 @@
 
     <string name="menu_home">Home</string>
     <string name="menu_board">Board</string>
-    <string name="menu_slideshow">Slideshow</string>
+    <string name="menu_task">Tasks</string>
     <string name="menu_settings">Settings</string>
     <string name="menu_share">Share</string>
     <string name="menu_project">Projects</string>
@@ -51,6 +51,9 @@
     <string name="last_name">Last name</string>
     <string name="city_hint">City</string>
     <string name="phone_number_hint">Phone number</string>
+    <string name="add_button">Add</string>
+    <string name="email_address_user_to_add">Email address user to add to project</string>
+    <string name="assigned_projects">Project assigned to You</string>
 
     <string-array name="project_state_array">
         <item>Open</item>

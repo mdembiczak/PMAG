@@ -1,9 +1,10 @@
 package com.management.pmag.model.repository
 
-import android.content.ContentValues
+import android.content.ContentValues.TAG
 import android.util.Log
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.QuerySnapshot
 import com.management.pmag.model.entity.User
 
@@ -16,14 +17,19 @@ class UserRepository {
     private val usersPath = "users"
     private var usersCollection = FirebaseFirestore.getInstance().collection(usersPath)
 
+
+    fun getUserQuery(emailAddress: String?): Query {
+        return usersCollection.whereEqualTo("emailAddress", emailAddress)
+    }
+
     fun getUser(emailAddress: String?): Task<QuerySnapshot> {
-        return usersCollection.whereEqualTo("emailAddress", emailAddress).get()
+        return getUserQuery(emailAddress).get()
     }
 
     fun saveUser(user: User) {
         usersCollection.add(user)
-            .addOnSuccessListener { Log.d(ContentValues.TAG, "User was added successfully") }
-            .addOnFailureListener { Log.e(ContentValues.TAG, "Error with saving user $it") }
+            .addOnSuccessListener { Log.d(TAG, "User was added successfully") }
+            .addOnFailureListener { Log.e(TAG, "Error with saving user $it") }
     }
 
     fun updateProjectContext(emailAddress: String?, projectTag: String) {
@@ -33,6 +39,7 @@ class UserRepository {
                 usersCollection.document(documentId).update(
                     projectContextFieldName, projectTag
                 )
+                Log.d(TAG, "Project context for user $emailAddress updated")
             }
     }
 
@@ -45,6 +52,7 @@ class UserRepository {
     ) {
         getUser(emailAddress)
             .addOnSuccessListener {
+                Log.d(TAG, "User details updated for user: $emailAddress")
                 val documentId = it.documents.first().id
                 usersCollection.document(documentId).update(
                     firstNameFieldName, firstName,
@@ -52,6 +60,9 @@ class UserRepository {
                     phoneNumberFieldName, phoneNumber,
                     cityFieldName, city
                 )
+            }
+            .addOnFailureListener {
+                Log.e(TAG, "ERROR: User details update failed")
             }
     }
 }

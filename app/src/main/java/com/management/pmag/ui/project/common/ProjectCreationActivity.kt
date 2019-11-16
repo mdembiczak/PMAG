@@ -29,29 +29,32 @@ class ProjectCreationActivity : AppCompatActivity() {
         newProjectDescription = findViewById(R.id.newProjectDescription)
         addNewProjectButton = findViewById(R.id.addProjectFloatingButton)
 
+        addNewProjectButtonOnClickListener()
+    }
+
+    private fun addNewProjectButtonOnClickListener() {
         addNewProjectButton.setOnClickListener {
             val projectTag = newProjectTag.editText?.text.toString()
             val projectName = newProjectName.editText?.text.toString()
             val projectDescription = newProjectDescription.editText?.text.toString()
             if (validateProjectFields(projectTag, projectName)) {
-                addNewProjectButton.setOnClickListener {
-                    val uid = PMAGApp.fUser?.uid
-                    if (uid != null) {
-                        val project =
-                            projectCreation(
-                                projectTag.toUpperCase(),
-                                projectName,
-                                projectDescription,
-                                uid
-                            )
-                        project?.let { existingProject ->
-                            projectRepository.saveProject(
-                                existingProject
-                            )
-                            finish()
-                        }
+                val uid = PMAGApp.firebaseAuth.currentUser?.uid
+                if (uid != null) {
+                    val project =
+                        projectCreation(
+                            projectTag.toUpperCase(),
+                            projectName,
+                            projectDescription,
+                            uid
+                        )
+                    project?.let { existingProject ->
+                        projectRepository.saveProject(
+                            existingProject
+                        )
+                        finish()
                     }
                 }
+
             }
         }
     }
