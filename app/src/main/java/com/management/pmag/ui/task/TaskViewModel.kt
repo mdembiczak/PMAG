@@ -1,4 +1,4 @@
-package com.management.pmag.ui.slideshow
+package com.management.pmag.ui.task
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

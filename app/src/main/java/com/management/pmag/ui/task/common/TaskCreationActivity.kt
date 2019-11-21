@@ -1,4 +1,4 @@
-package com.management.pmag.ui.slideshow.common
+package com.management.pmag.ui.task.common
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity

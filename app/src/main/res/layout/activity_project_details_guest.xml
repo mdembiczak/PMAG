@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.project.common.ProjectDetailsGuestActivity">
+
+    <TextView
+            android:id="@+id/projectTagGuestTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="32dp"
+            android:textAlignment="center"
+            android:textIsSelectable="false"
+            android:textSize="24sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+            android:id="@+id/projectOwnerGuestTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:textSize="18sp"
+            android:textAlignment="center"
+            app:layout_constraintEnd_toEndOf="@+id/projectTagGuestTextView"
+            app:layout_constraintStart_toStartOf="@+id/projectTagGuestTextView"
+            app:layout_constraintTop_toBottomOf="@+id/projectTagGuestTextView" />
+
+    <TextView
+            android:id="@+id/projectNameGuestTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:textSize="18sp"
+            android:textAlignment="center"
+            app:layout_constraintEnd_toEndOf="@+id/projectOwnerGuestTextView"
+            app:layout_constraintStart_toStartOf="@+id/projectOwnerGuestTextView"
+            app:layout_constraintTop_toBottomOf="@+id/projectOwnerGuestTextView" />
+
+    <TextView
+            android:id="@+id/projectStateGuestTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:textAlignment="center"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="@+id/projectNameGuestTextView"
+            app:layout_constraintStart_toStartOf="@+id/projectNameGuestTextView"
+            app:layout_constraintTop_toBottomOf="@+id/projectNameGuestTextView" />
+
+    <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/projectDescriptionTextInputLayout"
+            android:layout_width="0dp"
+            android:layout_height="55dp"
+            android:layout_marginTop="16dp"
+            app:layout_constraintEnd_toEndOf="@+id/projectNameGuestTextView"
+            app:layout_constraintStart_toStartOf="@+id/projectNameGuestTextView"
+            app:layout_constraintTop_toBottomOf="@+id/projectStateGuestTextView">
+
+        <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/project_description" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <Button
+            android:id="@+id/saveButtonGuest"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/save_name"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/projectDescriptionTextInputLayout" />
+
+    <Button
+            android:id="@+id/setProjectAsDefaultGuestButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/set_as_default"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/saveButtonGuest" />
+</androidx.constraintlayout.widget.ConstraintLayout>

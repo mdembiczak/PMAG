@@ -60,10 +60,7 @@ class RegisterActivity : AppCompatActivity() {
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
                         userRepository.saveUser(
-                            User(
-                                emailAddress = email,
-                                userId = PMAGApp.firebaseAuth.currentUser?.uid.toString()
-                            )
+                            User(emailAddress = email)
                         )
                         startActivity(Intent(applicationContext, MainActivity::class.java))
                         finish()

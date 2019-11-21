@@ -12,8 +12,9 @@ import com.management.pmag.model.entity.Project
 import com.management.pmag.model.entity.User
 import com.management.pmag.model.repository.ProjectRepository
 import com.management.pmag.model.repository.UserRepository
+import com.management.pmag.ui.project.utils.ProjectUtils
 
-class ProjectDetailsActivity : AppCompatActivity() {
+class ProjectDetailsOwnerActivity : AppCompatActivity() {
 
     private lateinit var projectTag: TextView
     private lateinit var projectOwner: TextView
@@ -33,18 +34,8 @@ class ProjectDetailsActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_project_details)
-
-        projectTag = findViewById(R.id.staticProjectTagId)
-        projectOwner = findViewById(R.id.projectOwnerTextView)
-        projectName = findViewById(R.id.projectNameTextInputLayout)
-        projectStateSpinner = findViewById(R.id.projectStateSpinner)
-        projectDescription = findViewById(R.id.ProjectDescriptionTextInputLayout)
-        saveProjectButton = findViewById(R.id.saveButton)
-        setProjectAsDefaultButton = findViewById(R.id.setProjectAsDefaultId)
-        addProjectUserButton = findViewById(R.id.addUserButton)
-        projectUser = findViewById(R.id.userEmailAddressTextInputLayout)
-
+        setContentView(R.layout.activity_project_details_owner)
+        init()
 
         val project = intent.getSerializableExtra("PROJECT") as Project?
         project?.projectStatus?.let { initializeProjectStateSpinner(projectStateSpinner, it) }
@@ -60,8 +51,24 @@ class ProjectDetailsActivity : AppCompatActivity() {
         projectDescription.editText?.setText(project?.projectDescription)
 
         saveProjectOnClickListener(project)
-        setProjectAsDefaultOnClickListener(project)
+        ProjectUtils.setProjectAsDefaultOnClickListener(
+            setProjectAsDefaultButton,
+            projectTag.text.toString(),
+            PMAGApp.firebaseAuth.currentUser?.email!!
+        )
         addProjectUserOnClickListener(project!!.projectTag)
+    }
+
+    private fun init() {
+        projectTag = findViewById(R.id.staticProjectTagId)
+        projectOwner = findViewById(R.id.projectOwnerTextView)
+        projectName = findViewById(R.id.projectNameTextInputLayout)
+        projectStateSpinner = findViewById(R.id.projectStateSpinner)
+        projectDescription = findViewById(R.id.ProjectDescriptionTextInputLayout)
+        saveProjectButton = findViewById(R.id.saveButton)
+        setProjectAsDefaultButton = findViewById(R.id.setProjectAsDefaultId)
+        addProjectUserButton = findViewById(R.id.addUserButton)
+        projectUser = findViewById(R.id.userEmailAddressTextInputLayout)
     }
 
     private fun initializeProjectStateSpinner(
@@ -94,14 +101,14 @@ class ProjectDetailsActivity : AppCompatActivity() {
         }
     }
 
-    private fun setProjectAsDefaultOnClickListener(project: Project?) {
-        setProjectAsDefaultButton.setOnClickListener {
-            userRepository.updateProjectContext(
-                PMAGApp.firebaseAuth.currentUser?.email,
-                project!!.projectTag
-            )
-        }
-    }
+//    private fun setProjectAsDefaultOnClickListener(project: Project?) {
+//        setProjectAsDefaultButton.setOnClickListener {
+//            userRepository.updateProjectContext(
+//                PMAGApp.firebaseAuth.currentUser?.email,
+//                project!!.projectTag
+//            )
+//        }
+//    }
 
     private fun addProjectUserOnClickListener(projectTag: String) {
         addProjectUserButton.setOnClickListener {

@@ -54,6 +54,7 @@
     <string name="add_button">Add</string>
     <string name="email_address_user_to_add">Email address user to add to project</string>
     <string name="assigned_projects">Project assigned to You</string>
+    <string name="default_string">default</string>
 
     <string-array name="project_state_array">
         <item>Open</item>

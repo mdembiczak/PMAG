@@ -57,9 +57,9 @@ class ProjectRepository {
             .addOnFailureListener { Log.e(TAG, "Error with saving project $it") }
     }
 
-    fun getProjectsByOwnerId(): Query {
+    fun getProjectsByOwnerId(emailAddressOwnerId: String): Query {
         return projectsCollection
-            .whereEqualTo(projectOwnerIdFieldName, PMAGApp.firebaseAuth.currentUser?.uid)
+            .whereEqualTo(projectOwnerIdFieldName, emailAddressOwnerId)
     }
 
     fun getProjectByProjectTag(projectTag: String): Task<QuerySnapshot> {
@@ -68,11 +68,11 @@ class ProjectRepository {
             .get()
     }
 
-    fun getProjectByUserEmail(): Query {
+    fun getProjectByUserEmail(emailAddress: String): Query {
         return projectsCollection
             .whereArrayContains(
                 projectUsersFieldName,
-                PMAGApp.firebaseAuth.currentUser?.email.toString()
+                emailAddress
             )
     }
 

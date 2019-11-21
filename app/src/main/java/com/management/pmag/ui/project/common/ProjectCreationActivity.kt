@@ -7,11 +7,10 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.textfield.TextInputLayout
 import com.management.pmag.PMAGApp
 import com.management.pmag.R
-import com.management.pmag.model.entity.Project
 import com.management.pmag.model.repository.ProjectRepository
+import com.management.pmag.ui.project.utils.ProjectUtils
 
 class ProjectCreationActivity : AppCompatActivity() {
-    private val projectStatus = "Open"
 
     private lateinit var newProjectTag: TextInputLayout
     private lateinit var newProjectName: TextInputLayout
@@ -24,12 +23,15 @@ class ProjectCreationActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_project_creation)
 
+        init()
+        addNewProjectButtonOnClickListener()
+    }
+
+    private fun init() {
         newProjectTag = findViewById(R.id.newProjectTag)
         newProjectName = findViewById(R.id.newProjectName)
         newProjectDescription = findViewById(R.id.newProjectDescription)
         addNewProjectButton = findViewById(R.id.addProjectFloatingButton)
-
-        addNewProjectButtonOnClickListener()
     }
 
     private fun addNewProjectButtonOnClickListener() {
@@ -41,11 +43,12 @@ class ProjectCreationActivity : AppCompatActivity() {
                 val uid = PMAGApp.firebaseAuth.currentUser?.uid
                 if (uid != null) {
                     val project =
-                        projectCreation(
+                        ProjectUtils.projectCreation(
                             projectTag.toUpperCase(),
                             projectName,
                             projectDescription,
-                            uid
+                            uid,
+                            PMAGApp.firebaseAuth.currentUser?.email!!
                         )
                     project?.let { existingProject ->
                         projectRepository.saveProject(
@@ -57,19 +60,6 @@ class ProjectCreationActivity : AppCompatActivity() {
 
             }
         }
-    }
-
-    private fun projectCreation(
-        projectTag: String, projectName: String, projectDescription: String, userId: String
-    ): Project {
-        return Project(
-            projectTag,
-            projectName,
-            projectDescription,
-            projectStatus,
-            userId,
-            userId
-        )
     }
 
     private fun validateProjectFields(projectTag: String, projectName: String): Boolean {

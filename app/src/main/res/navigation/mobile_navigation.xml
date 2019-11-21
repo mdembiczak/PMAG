@@ -18,7 +18,7 @@
 
     <fragment
             android:id="@+id/nav_task"
-            android:name="com.management.pmag.ui.slideshow.TaskFragment"
+            android:name="com.management.pmag.ui.task.TaskFragment"
             android:label="@string/menu_task" />
 
     <fragment
