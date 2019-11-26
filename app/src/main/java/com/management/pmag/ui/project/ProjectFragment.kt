@@ -25,18 +25,18 @@ import com.management.pmag.ui.project.common.ProjectDetailsOwnerActivity
 import com.management.pmag.ui.project.utils.ProjectAdapter
 
 class ProjectFragment : Fragment() {
-
     private lateinit var ownedProjectListView: ListView
     private lateinit var assignedProjectListView: ListView
     private lateinit var projectViewModel: ProjectViewModel
     private lateinit var notAssignedToProject: TextView
     private lateinit var addProjectFloatingButton: FloatingActionButton
+    private lateinit var ownedProjectAdapter: ProjectAdapter
+    private lateinit var assignedProjectAdapter: ProjectAdapter
+
     private val projectRepository: ProjectRepository = ProjectRepository()
 
     private val projectExtra = "PROJECT"
     private val emptyString = ""
-    private lateinit var ownedProjectAdapter: ProjectAdapter
-    private lateinit var assignedProjectAdapter: ProjectAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -45,29 +45,29 @@ class ProjectFragment : Fragment() {
     ): View? {
         val root = inflater.inflate(R.layout.fragment_project, container, false)
         val textView: TextView = root.findViewById(R.id.text_send)
-        notAssignedToProject = root.findViewById(R.id.notAssignToProject)
-        ownedProjectListView = root.findViewById(R.id.ownedProjectListView)
-        assignedProjectListView = root.findViewById(R.id.assignedProjectListView)
+        init(root)
 
         onClickProjectListItem(ownedProjectListView)
         onClickProjectListItem(assignedProjectListView)
         loadProjectsToOwnedProjectListView(ownedProjectListView)
         loadProjectsToAssignedProjectListView(assignedProjectListView)
 
-
-        addProjectFloatingButton = root.findViewById(R.id.addProjectFloatingButton)
         addProjectFloatingButton.setOnClickListener {
             startActivity(Intent(PMAGApp.ctx, ProjectCreationActivity::class.java))
         }
-
         projectViewModel =
             ViewModelProviders.of(this).get(ProjectViewModel::class.java)
-
-
         projectViewModel.text.observe(this, Observer {
             textView.text = it
         })
         return root
+    }
+
+    private fun init(root: View) {
+        notAssignedToProject = root.findViewById(R.id.notAssignToProject)
+        ownedProjectListView = root.findViewById(R.id.ownedProjectListView)
+        assignedProjectListView = root.findViewById(R.id.assignedProjectListView)
+        addProjectFloatingButton = root.findViewById(R.id.addProjectFloatingButton)
     }
 
     private fun onClickProjectListItem(listView: ListView) {
@@ -75,8 +75,8 @@ class ProjectFragment : Fragment() {
             val projectTagTextView: TextView = view.findViewById(R.id.projectTagTextView)
             val projectTag = projectTagTextView.text.toString()
             projectRepository.getProjectByProjectTag(projectTag)
-                .addOnSuccessListener { result ->
-                    val project = result.toObjects(Project::class.java).first()
+                .addOnSuccessListener {
+                    val project = it.toObjects(Project::class.java).first()
                     if (project.projectOwnerId.equals(PMAGApp.firebaseAuth.currentUser?.email!!)) {
                         val projectDetailsIntent =
                             Intent(context, ProjectDetailsOwnerActivity::class.java)

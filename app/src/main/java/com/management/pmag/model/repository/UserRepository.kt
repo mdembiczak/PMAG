@@ -9,7 +9,7 @@ import com.google.firebase.firestore.QuerySnapshot
 import com.management.pmag.model.entity.User
 
 class UserRepository {
-    private val projectContextFieldName = "projectContextFieldName"
+    private val projectContextFieldName = "projectContext"
     private val firstNameFieldName = "firstName"
     private val lastNameFieldName = "lastName"
     private val cityFieldName = "city"

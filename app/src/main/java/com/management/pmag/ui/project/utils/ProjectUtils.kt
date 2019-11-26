@@ -5,7 +5,7 @@ import com.management.pmag.model.entity.Project
 import com.management.pmag.model.repository.UserRepository
 
 object ProjectUtils {
-    private val projectStatus = "Open"
+    private const val projectStatus = "Open"
 
     private val userRepository = UserRepository()
     fun setProjectAsDefaultOnClickListener(button: Button, projectTag: String, email: String) {

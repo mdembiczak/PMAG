@@ -53,7 +53,7 @@ class ProjectDetailsOwnerActivity : AppCompatActivity() {
         saveProjectOnClickListener(project)
         ProjectUtils.setProjectAsDefaultOnClickListener(
             setProjectAsDefaultButton,
-            projectTag.text.toString(),
+            project?.projectTag!!,
             PMAGApp.firebaseAuth.currentUser?.email!!
         )
         addProjectUserOnClickListener(project!!.projectTag)
@@ -100,15 +100,6 @@ class ProjectDetailsOwnerActivity : AppCompatActivity() {
             finish()
         }
     }
-
-//    private fun setProjectAsDefaultOnClickListener(project: Project?) {
-//        setProjectAsDefaultButton.setOnClickListener {
-//            userRepository.updateProjectContext(
-//                PMAGApp.firebaseAuth.currentUser?.email,
-//                project!!.projectTag
-//            )
-//        }
-//    }
 
     private fun addProjectUserOnClickListener(projectTag: String) {
         addProjectUserButton.setOnClickListener {

@@ -44,7 +44,7 @@
     <string name="project_status">Project status</string>
     <string name="project_description">Project Description</string>
     <string name="fill_data_to_add_project">Fill required data to add project</string>
-    <string name="project_tag">Project TAG</string>
+    <string name="project_tag" translatable="false">Project TAG</string>
     <string name="save_name">Save</string>
     <string name="set_as_default">Set Project as default</string>
     <string name="first_name">First name</string>
@@ -55,11 +55,24 @@
     <string name="email_address_user_to_add">Email address user to add to project</string>
     <string name="assigned_projects">Project assigned to You</string>
     <string name="default_string">default</string>
+    <string name="task_title">Title</string>
+    <string name="description">Description</string>
+    <string name="fill_data_to_add_task">Fill required data to add task</string>
+    <string name="task_assigned_to_user">Assigned to user</string>
+    <string name="created_by">Created by:</string>
+    <string name="title_text_with_common">Title:</string>
+    <string name="task_tag">Task TAG:</string>
 
     <string-array name="project_state_array">
         <item>Open</item>
         <item>In progress</item>
         <item>Presentation at the client\'s</item>
+        <item>Finished</item>
+    </string-array>
+
+    <string-array name="task_state_array">
+        <item>Open</item>
+        <item>In progress</item>
         <item>Finished</item>
     </string-array>
 </resources>

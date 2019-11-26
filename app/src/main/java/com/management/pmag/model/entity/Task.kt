@@ -7,8 +7,8 @@ data class Task(
     val projectTag: String = "",
     val title: String = "",
     val description: String = "",
+    val state: String = "",
     val taskCreatorId: String = "",
     val assignedTo: String = "",
-    val creationData: String = "",
-    val commentsId: String = ""
+    val creationData: String = ""
 ) : Serializable
