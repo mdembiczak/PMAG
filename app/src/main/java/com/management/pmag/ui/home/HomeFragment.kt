@@ -8,10 +8,14 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import com.applandeo.materialcalendarview.CalendarView
 import com.applandeo.materialcalendarview.EventDay
+import com.management.pmag.PMAGApp
 import com.management.pmag.R
 import com.management.pmag.model.entity.Task
+import com.management.pmag.model.entity.User
 import com.management.pmag.model.repository.TaskRepository
 import com.management.pmag.model.repository.UserRepository
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -35,52 +39,67 @@ class HomeFragment : Fragment() {
             ViewModelProviders.of(this).get(HomeViewModel::class.java)
         val root = inflater.inflate(R.layout.fragment_home, container, false)
 
-        val calendar = Calendar.getInstance()
-        var events: ArrayList<EventDay> = ArrayList()
-        events.add(EventDay(calendar, R.drawable.ic_launcher))
         val calendarView: CalendarView = root.findViewById(R.id.calendarView)
-        calendarView.setEvents(events)
+
+        val calendar = Calendar.getInstance()
+        val calMin: Calendar = Calendar.getInstance()
+        calMin.set(2019, 0, 1)
+        val calMax: Calendar = Calendar.getInstance().also {
+            it.set(2030, 0, 1)
+        }
+
+        calendarView.setMinimumDate(calMin)
+        calendarView.setMaximumDate(calMax)
+        calendarView.setDate(calendar)
+
+        userRepository.getUserQuery(PMAGApp.firebaseAuth.currentUser?.email!!)
+            .get()
+            .addOnSuccessListener { userQuery ->
+                val user = userQuery?.toObjects(User::class.java)?.first()!!
+                taskRepository.getQueryTaskByProjectTag(user.projectContext)
+                    .get()
+                    .addOnSuccessListener { taskQuery ->
+                        taskList = taskQuery?.toObjects(Task::class.java)?.toList()!!
+                        if (taskList.isNotEmpty()) {
+                            val events: ArrayList<EventDay> = ArrayList()
+                            taskList.forEach {
+                                val calendarToEvent = Calendar.getInstance()
+                                val date =
+                                    LocalDate.parse(it.creationData, DateTimeFormatter.ISO_DATE)
+                                calendarToEvent.set(date.year, date.monthValue - 1, date.dayOfMonth)
+                                events.add(EventDay(calendarToEvent, R.drawable.ic_launcher))
+                            }
+                            calendarView.setEvents(events)
+                        }
+                    }
+            }
 
 
-//        customCalendar = root.findViewById(R.id.customCalendar)
-//
-//
-//        userRepository.getUserQuery(PMAGApp.firebaseAuth.currentUser?.email!!)
-//            .addSnapshotListener { userQuery, _ ->
-//                val user = userQuery?.toObjects(User::class.java)?.first()!!
-//                taskRepository.getQueryTaskByProjectTag(user.projectContext)
-//                    .addSnapshotListener { taskQuery, _ ->
-//                        taskList = taskQuery?.toObjects(Task::class.java)?.toList()!!
-//                        dateList = taskList.map { it.creationData }
-//                        if (dateList.isNotEmpty()) {
-//                            for (i in dateList.indices) {
-//                                customCalendar.addAnEvent(
-//                                    dateList[i],
-//                                    1,
-//                                    arrayListOf(eventDataMapper(taskList[i]))
-//                                )
-//                            }
-//                        }
-//                    }
-//            }
+        calendarView.setOnDayClickListener {
+            val time = it.calendar.time.toString()
+            val split = time.split(" ")
+            val calendarDate = "${split[2]}-${mapDayName(split[1])}-${split[5]}"
+        }
+
 
         return root
     }
 
-//    fun eventDataMapper(task: Task): EventData {
-//        val eventData = EventData()
-//        val dataAboutDate = dataAboutDateMapper(task)
-//        eventData.data = arrayListOf(dataAboutDate)
-//        eventData.section = "Task"
-//        return eventData
-//    }
-//
-//    private fun dataAboutDateMapper(task: Task): dataAboutDate {
-//        val dataAboutDate = dataAboutDate()
-//        dataAboutDate.title = task.title
-//        dataAboutDate.subject = task.taskTag
-//        dataAboutDate.submissionDate = task.dueDate
-//        dataAboutDate.remarks = ""
-//        return dataAboutDate
-//    }
+    private fun mapDayName(name: String): Int {
+        when (name) {
+            "Jan" -> return 1
+            "Feb" -> return 2
+            "Mar" -> return 3
+            "Apr" -> return 4
+            "May" -> return 5
+            "Jun" -> return 6
+            "Jul" -> return 7
+            "Aug" -> return 8
+            "Sep" -> return 9
+            "Oct" -> return 10
+            "Nov" -> return 11
+            "Dec" -> return 12
+        }
+        return 0
+    }
 }
