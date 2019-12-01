@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel
 class TaskViewModel : ViewModel() {
 
     private val _text = MutableLiveData<String>().apply {
-        value = "Your tasks"
+        value = "All tasks assigned to you"
     }
     val text: LiveData<String> = _text
 }

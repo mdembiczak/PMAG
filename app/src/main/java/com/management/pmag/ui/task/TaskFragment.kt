@@ -68,21 +68,26 @@ class TaskFragment : Fragment() {
 
     private fun loadTasksToTaskListView(taskListView: ListView) {
         userRepository.getUserQuery(PMAGApp.firebaseAuth.currentUser?.email!!)
-            .addSnapshotListener { snapshot, exception ->
+            .addSnapshotListener { snapshot, _ ->
                 val user = snapshot?.toObjects(User::class.java)?.first()
                 if (!Strings.isEmptyOrWhitespace(user?.projectContext)) {
-                    taskRepository.getQueryTaskByProjectTag(user?.projectContext!!)
+                    taskRepository.getTaskByAssignedTo(
+                        PMAGApp.firebaseAuth.currentUser?.email!!,
+                        user?.projectContext!!
+                    )
                         .addSnapshotListener { taskSnapshot, taskException ->
                             val validTaskList = queryTaskList(taskException, taskSnapshot)
                             if (validTaskList.isNotEmpty()) {
-                                Log.d(ContentValues.TAG, "User has assigned tasks")
+                                Log.d(
+                                    ContentValues.TAG,
+                                    "The are some existing tasks for user in current project context"
+                                )
                                 taskListView.adapter =
                                     TaskAdapter(PMAGApp.ctx, ArrayList(validTaskList))
                             }
                         }
                 }
             }
-
     }
 
     private fun onClickTaskItemList(listView: ListView) {

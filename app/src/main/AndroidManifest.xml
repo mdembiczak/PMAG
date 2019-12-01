@@ -14,7 +14,7 @@
             android:supportsRtl="true"
             android:theme="@style/AppTheme"
             tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".ui.task.common.TaskDetailsActivity"></activity>
+        <activity android:name=".ui.task.common.TaskDetailsActivity" />
         <activity android:name=".ui.project.common.ProjectDetailsGuestActivity" />
         <activity android:name=".ui.task.common.TaskCreationActivity" />
         <activity

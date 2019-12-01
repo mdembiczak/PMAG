@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel
 class BoardViewModel : ViewModel() {
 
     private val _text = MutableLiveData<String>().apply {
-        value = "This is gallery Board"
+        value = "Agile Board"
     }
     val text: LiveData<String> = _text
 }

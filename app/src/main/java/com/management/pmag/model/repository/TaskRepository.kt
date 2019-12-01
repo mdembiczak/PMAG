@@ -16,9 +16,9 @@ class TaskRepository {
     private val assignedToFieldName = "assignedTo"
     private val taskTagFieldName = "taskTag"
     private val projectTagFieldName = "projectTag"
-    private val stateFieldName = "status"
+    private val stateFieldName = "state"
     private val descriptionFieldName = "description"
-
+    private val dueDateFieldName = "dueDate"
 
     fun getTaskByTaskTag(taskTag: String): com.google.android.gms.tasks.Task<QuerySnapshot> {
         return taskCollection
@@ -26,14 +26,19 @@ class TaskRepository {
             .get()
     }
 
-    fun getQueryTaskByProjectTag(defaultProjectTag: String): Query {
-        return taskCollection
-            .whereEqualTo(projectTagFieldName, defaultProjectTag)
-    }
-
     fun getTasksByProjectTag(defaultProjectTag: String): com.google.android.gms.tasks.Task<QuerySnapshot> {
         return getQueryTaskByProjectTag(defaultProjectTag)
             .get()
+    }
+
+    fun getQueryTaskByProjectTagAndStatus(projectTag: String, status: String): Query {
+        return getQueryTaskByProjectTag(projectTag)
+            .whereEqualTo(stateFieldName, status)
+    }
+
+    fun getTaskByAssignedTo(email: String, projectTag: String): Query {
+        return getQueryTaskByProjectTag(projectTag)
+            .whereEqualTo(assignedToFieldName, email)
     }
 
     fun save(task: Task) {
@@ -46,7 +51,8 @@ class TaskRepository {
         taskTag: String,
         taskState: String,
         taskAssignedTo: String,
-        taskDescription: String
+        taskDescription: String,
+        dueDate: String
     ) {
         getTaskByTaskTag(taskTag)
             .addOnSuccessListener {
@@ -58,7 +64,8 @@ class TaskRepository {
                     taskTagFieldName, taskTag,
                     stateFieldName, taskState,
                     assignedToFieldName, taskAssignedTo,
-                    descriptionFieldName, taskDescription
+                    descriptionFieldName, taskDescription,
+                    dueDateFieldName, dueDate
                 )
             }
             .addOnFailureListener {
@@ -66,5 +73,10 @@ class TaskRepository {
                 Toast.makeText(PMAGApp.ctx, "Update task failed, try again.", Toast.LENGTH_LONG)
                     .show()
             }
+    }
+
+    fun getQueryTaskByProjectTag(defaultProjectTag: String): Query {
+        return taskCollection
+            .whereEqualTo(projectTagFieldName, defaultProjectTag)
     }
 }

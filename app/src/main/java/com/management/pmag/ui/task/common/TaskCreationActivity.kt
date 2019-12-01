@@ -3,6 +3,7 @@ package com.management.pmag.ui.task.common
 import android.content.ContentValues
 import android.os.Bundle
 import android.util.Log
+import android.widget.DatePicker
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.common.util.Strings
@@ -14,12 +15,14 @@ import com.management.pmag.model.entity.Task
 import com.management.pmag.model.entity.User
 import com.management.pmag.model.repository.TaskRepository
 import com.management.pmag.model.repository.UserRepository
+import com.management.pmag.ui.task.utils.TaskService.dateHandling
 import java.time.LocalDateTime
 
 class TaskCreationActivity : AppCompatActivity() {
 
     private lateinit var taskTitle: TextInputLayout
     private lateinit var taskDescription: TextInputLayout
+    private lateinit var datePicker: DatePicker
     private lateinit var saveTaskFloatingButton: FloatingActionButton
 
     private val taskRepository = TaskRepository()
@@ -37,6 +40,7 @@ class TaskCreationActivity : AppCompatActivity() {
         taskTitle = findViewById(R.id.taskTitleTextInputLayout)
         taskDescription = findViewById(R.id.taskDescriptionTextInputLayout)
         saveTaskFloatingButton = findViewById(R.id.saveTaskFloatingButton)
+        datePicker = findViewById(R.id.datePicker)
     }
 
     private fun saveTaskOnClickListener() {
@@ -74,7 +78,9 @@ class TaskCreationActivity : AppCompatActivity() {
     private fun buildTask(nextTaskNumber: Int, projectContext: String): Task {
         val taskTag = buildTaskTag(nextTaskNumber, projectContext)
         val dateNow = LocalDateTime.now()
-        val formattedDate = "${dateNow.dayOfMonth} ${dateNow.month} ${dateNow.year}"
+        val formattedDate = "${dateNow.year}-${dateNow.monthValue}-${dateNow.dayOfMonth}"
+        val dueDate = dateHandling(datePicker)
+        Log.d(ContentValues.TAG, dueDate)
         return Task(
             taskTag,
             projectContext,
@@ -83,7 +89,8 @@ class TaskCreationActivity : AppCompatActivity() {
             TASK_INITIALIZE_STATUS,
             PMAGApp.firebaseAuth.currentUser?.email!!,
             UNASSIGNED,
-            formattedDate
+            formattedDate,
+            dueDate
         )
     }
 

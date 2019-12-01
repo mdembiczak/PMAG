@@ -10,5 +10,6 @@ data class Task(
     val state: String = "",
     val taskCreatorId: String = "",
     val assignedTo: String = "",
-    val creationData: String = ""
+    val creationData: String = "",
+    val dueDate: String = ""
 ) : Serializable

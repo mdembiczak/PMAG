@@ -62,6 +62,8 @@
     <string name="created_by">Created by:</string>
     <string name="title_text_with_common">Title:</string>
     <string name="task_tag">Task TAG:</string>
+    <string name="task_status">Tasks status</string>
+    <string name="due_date">Due date</string>
 
     <string-array name="project_state_array">
         <item>Open</item>
