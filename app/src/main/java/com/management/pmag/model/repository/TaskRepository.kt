@@ -36,9 +36,14 @@ class TaskRepository {
             .whereEqualTo(stateFieldName, status)
     }
 
-    fun getTaskByAssignedTo(email: String, projectTag: String): Query {
+    fun getQueryTaskByAssignedTo(email: String, projectTag: String): Query {
         return getQueryTaskByProjectTag(projectTag)
             .whereEqualTo(assignedToFieldName, email)
+    }
+
+    fun getQueryTaskByDueDate(projectTag: String, dueDate: String): Query {
+        return getQueryTaskByProjectTag(projectTag)
+            .whereEqualTo(dueDateFieldName, dueDate)
     }
 
     fun save(task: Task) {

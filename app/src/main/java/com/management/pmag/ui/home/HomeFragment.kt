@@ -1,5 +1,6 @@
 package com.management.pmag.ui.home
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -14,6 +15,7 @@ import com.management.pmag.model.entity.Task
 import com.management.pmag.model.entity.User
 import com.management.pmag.model.repository.TaskRepository
 import com.management.pmag.model.repository.UserRepository
+import com.management.pmag.ui.home.activities.TasksFromCalendarActivity
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.*
@@ -65,7 +67,7 @@ class HomeFragment : Fragment() {
                             taskList.forEach {
                                 val calendarToEvent = Calendar.getInstance()
                                 val date =
-                                    LocalDate.parse(it.creationData, DateTimeFormatter.ISO_DATE)
+                                    LocalDate.parse(it.dueDate, DateTimeFormatter.ISO_DATE)
                                 calendarToEvent.set(date.year, date.monthValue - 1, date.dayOfMonth)
                                 events.add(EventDay(calendarToEvent, R.drawable.ic_launcher))
                             }
@@ -78,7 +80,10 @@ class HomeFragment : Fragment() {
         calendarView.setOnDayClickListener {
             val time = it.calendar.time.toString()
             val split = time.split(" ")
-            val calendarDate = "${split[2]}-${mapDayName(split[1])}-${split[5]}"
+            val calendarDate = "${split[5]}-${mapDayName(split[1])}-${split[2]}"
+            val calendarDateIntent = Intent(context, TasksFromCalendarActivity::class.java)
+            calendarDateIntent.putExtra("DUE_DATE", calendarDate)
+            startActivity(calendarDateIntent)
         }
 
 

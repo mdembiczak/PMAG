@@ -71,7 +71,7 @@ class TaskFragment : Fragment() {
             .addSnapshotListener { snapshot, _ ->
                 val user = snapshot?.toObjects(User::class.java)?.first()
                 if (!Strings.isEmptyOrWhitespace(user?.projectContext)) {
-                    taskRepository.getTaskByAssignedTo(
+                    taskRepository.getQueryTaskByAssignedTo(
                         PMAGApp.firebaseAuth.currentUser?.email!!,
                         user?.projectContext!!
                     )

@@ -37,16 +37,15 @@ class TaskDetailsActivity : AppCompatActivity() {
         taskDescription.editText?.setText(task?.description.orEmpty())
         task?.dueDate.let {
             val date = LocalDate.parse(it, DateTimeFormatter.ISO_DATE)
-            datePicker.updateDate(date.year, date.monthValue, date.dayOfMonth)
+            datePicker.updateDate(date.year, date.monthValue - 1, date.dayOfMonth)
             dueDate = it.orEmpty()
         }
         datePicker.setOnDateChangedListener { _, year, monthOfYear, dayOfMonth ->
             dueDate = if (datePicker.month < 10) {
-                "${year}-0${monthOfYear}-${dayOfMonth}"
+                "${year}-0${monthOfYear + 1}-${dayOfMonth}"
             } else {
-                "${year}-${monthOfYear}-${dayOfMonth}"
+                "${year}-${monthOfYear + 1}-${dayOfMonth}"
             }
-            Toast.makeText(PMAGApp.ctx, dueDate, Toast.LENGTH_LONG).show()
         }
         saveButtonOnClickListener(task?.taskTag!!)
     }
@@ -79,7 +78,6 @@ class TaskDetailsActivity : AppCompatActivity() {
 
     private fun saveButtonOnClickListener(taskTag: String) {
         saveTaskButton.setOnClickListener {
-            //sprobowac wrzucic tutaj logike parsowania
             TaskService.saveTask(
                 taskTag,
                 taskState.selectedItem.toString(),
@@ -87,6 +85,7 @@ class TaskDetailsActivity : AppCompatActivity() {
                 taskDescription.editText?.text.toString(),
                 dueDate
             )
+            finish()
         }
     }
 }

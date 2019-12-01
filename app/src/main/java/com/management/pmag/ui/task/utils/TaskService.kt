@@ -18,9 +18,9 @@ object TaskService {
 
     fun dateHandling(datePicker: DatePicker): String {
         return if (datePicker.month < 10) {
-            "${datePicker.year}-0${datePicker.month}-${datePicker.dayOfMonth}"
+            "${datePicker.year}-0${datePicker.month + 1}-${datePicker.dayOfMonth}"
         } else {
-            "${datePicker.year}-${datePicker.month}-${datePicker.dayOfMonth}"
+            "${datePicker.year}-${datePicker.month + 1}-${datePicker.dayOfMonth}"
         }
     }
 }
