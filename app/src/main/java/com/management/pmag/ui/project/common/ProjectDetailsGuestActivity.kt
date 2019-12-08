@@ -3,6 +3,7 @@ package com.management.pmag.ui.project.common
 import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.textfield.TextInputLayout
 import com.management.pmag.PMAGApp
@@ -65,6 +66,8 @@ class ProjectDetailsGuestActivity : AppCompatActivity() {
                 projectState.text.toString(),
                 projectDescription.editText?.text.toString()
             )
+            Toast.makeText(PMAGApp.ctx, "Projects details updated successfully", Toast.LENGTH_LONG)
+                .show()
             finish()
         }
     }

@@ -85,6 +85,7 @@ class TaskDetailsActivity : AppCompatActivity() {
                 taskDescription.editText?.text.toString(),
                 dueDate
             )
+            Toast.makeText(PMAGApp.ctx, "Task updated successfully", Toast.LENGTH_LONG).show()
             finish()
         }
     }

@@ -97,6 +97,8 @@ class ProjectDetailsOwnerActivity : AppCompatActivity() {
                 projectStateSpinner.selectedItem.toString(),
                 projectDescription.editText?.text.toString()
             )
+            Toast.makeText(PMAGApp.ctx, "Projects details updated successfully", Toast.LENGTH_LONG)
+                .show()
             finish()
         }
     }

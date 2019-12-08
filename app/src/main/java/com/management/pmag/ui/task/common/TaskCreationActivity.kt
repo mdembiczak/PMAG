@@ -57,7 +57,13 @@ class TaskCreationActivity : AppCompatActivity() {
                         if (areFiledFields()) {
                             val task = buildTask(nextTaskNumber, user.projectContext)
                             taskRepository.save(task)
+                            Toast.makeText(
+                                PMAGApp.ctx,
+                                "Task added successfully",
+                                Toast.LENGTH_LONG
+                            ).show()
                         }
+                        finish()
                     }
             }
         }
