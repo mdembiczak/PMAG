@@ -59,8 +59,9 @@
 
         <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/projectDescriptionTextInputLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="0dp"
-                android:layout_height="55dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 app:layout_constraintEnd_toEndOf="@+id/projectNameGuestTextView"
                 app:layout_constraintStart_toStartOf="@+id/projectNameGuestTextView"

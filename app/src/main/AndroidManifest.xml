@@ -14,11 +14,21 @@
             android:supportsRtl="true"
             android:theme="@style/AppTheme"
             tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".ui.home.activities.TaskDetailsFromCalendarActivity"></activity>
-        <activity android:name=".ui.home.activities.TasksFromCalendarActivity" />
-        <activity android:name=".ui.task.common.TaskDetailsActivity" />
-        <activity android:name=".ui.project.common.ProjectDetailsGuestActivity" />
-        <activity android:name=".ui.task.common.TaskCreationActivity" />
+        <activity
+                android:name=".ui.home.activities.TaskDetailsFromCalendarActivity"
+                android:screenOrientation="portrait" />
+        <activity
+                android:name=".ui.home.activities.TasksFromCalendarActivity"
+                android:screenOrientation="portrait" />
+        <activity
+                android:name=".ui.task.common.TaskDetailsActivity"
+                android:screenOrientation="portrait" />
+        <activity
+                android:name=".ui.project.common.ProjectDetailsGuestActivity"
+                android:screenOrientation="portrait" />
+        <activity
+                android:name=".ui.task.common.TaskCreationActivity"
+                android:screenOrientation="portrait" />
         <activity
                 android:name=".ui.project.common.ProjectCreationActivity"
                 android:windowSoftInputMode="adjustResize" />
@@ -38,7 +48,6 @@
                 android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

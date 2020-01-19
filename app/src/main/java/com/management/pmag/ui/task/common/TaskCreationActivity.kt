@@ -54,7 +54,7 @@ class TaskCreationActivity : AppCompatActivity() {
                         val taskList = snapshot.toObjects(Task::class.java)
                         val nextTaskNumber = taskList.count() + 1
                         Log.d(ContentValues.TAG, "Next task number is $nextTaskNumber")
-                        if (areFiledFields()) {
+                        if (areFilledFields()) {
                             val task = buildTask(nextTaskNumber, user.projectContext)
                             taskRepository.save(task)
                             Toast.makeText(
@@ -69,7 +69,7 @@ class TaskCreationActivity : AppCompatActivity() {
         }
     }
 
-    private fun areFiledFields(): Boolean {
+    private fun areFilledFields(): Boolean {
         if (Strings.isEmptyOrWhitespace(taskTitle.editText?.text.toString())) {
             Toast.makeText(applicationContext, "Task title is not filled", Toast.LENGTH_LONG).show()
             return false

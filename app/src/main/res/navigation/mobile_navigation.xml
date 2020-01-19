@@ -28,12 +28,6 @@
             tools:layout="@layout/fragment_settings" />
 
     <fragment
-            android:id="@+id/nav_share"
-            android:name="com.management.pmag.ui.share.ShareFragment"
-            android:label="@string/menu_share"
-            tools:layout="@layout/fragment_share" />
-
-    <fragment
             android:id="@+id/nav_project"
             android:name="com.management.pmag.ui.project.ProjectFragment"
             android:label="@string/menu_project"

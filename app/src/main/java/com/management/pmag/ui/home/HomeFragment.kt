@@ -25,11 +25,9 @@ class HomeFragment : Fragment() {
 
     private lateinit var homeViewModel: HomeViewModel
 
-
     private val taskRepository = TaskRepository()
     private val userRepository = UserRepository()
 
-    private var dateList = emptyList<String>()
     private var taskList = emptyList<Task>()
 
     override fun onCreateView(
@@ -54,6 +52,21 @@ class HomeFragment : Fragment() {
         calendarView.setMaximumDate(calMax)
         calendarView.setDate(calendar)
 
+        fillCalendarEvents(calendarView)
+
+        calendarView.setOnDayClickListener {
+            val time = it.calendar.time.toString()
+            val split = time.split(" ")
+            val calendarDate = "${split[5]}-${mapDayName(split[1])}-${split[2]}"
+            val calendarDateIntent = Intent(context, TasksFromCalendarActivity::class.java)
+            calendarDateIntent.putExtra("DUE_DATE", calendarDate)
+            startActivity(calendarDateIntent)
+        }
+
+        return root
+    }
+
+    private fun fillCalendarEvents(calendarView: CalendarView) {
         userRepository.getUserQuery(PMAGApp.firebaseAuth.currentUser?.email!!)
             .get()
             .addOnSuccessListener { userQuery ->
@@ -75,19 +88,6 @@ class HomeFragment : Fragment() {
                         }
                     }
             }
-
-
-        calendarView.setOnDayClickListener {
-            val time = it.calendar.time.toString()
-            val split = time.split(" ")
-            val calendarDate = "${split[5]}-${mapDayName(split[1])}-${split[2]}"
-            val calendarDateIntent = Intent(context, TasksFromCalendarActivity::class.java)
-            calendarDateIntent.putExtra("DUE_DATE", calendarDate)
-            startActivity(calendarDateIntent)
-        }
-
-
-        return root
     }
 
     private fun mapDayName(name: String): Int {

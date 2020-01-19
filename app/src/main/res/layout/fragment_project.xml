@@ -12,11 +12,13 @@
             android:layout_height="wrap_content"
             android:layout_gravity="end"
             android:layout_margin="16dp"
-            android:src="@drawable/ic_menu_send"
+            android:src="@drawable/add_image"
+            app:backgroundTint="#F44336"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.99"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/assignedProjectListView" />
+            app:layout_constraintTop_toBottomOf="@+id/assignedProjectListView"
+            app:rippleColor="#F44336" />
 
     <TextView
             android:id="@+id/text_send"

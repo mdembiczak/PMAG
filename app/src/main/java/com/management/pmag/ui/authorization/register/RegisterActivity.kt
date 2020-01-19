@@ -2,11 +2,11 @@ package com.management.pmag.ui.authorization.register
 
 import android.content.Intent
 import android.os.Bundle
-import android.text.TextUtils
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.google.common.base.Strings
 import com.management.pmag.MainActivity
 import com.management.pmag.PMAGApp
 import com.management.pmag.R
@@ -18,6 +18,8 @@ class RegisterActivity : AppCompatActivity() {
     lateinit var email: EditText
     lateinit var password: EditText
     lateinit var signUp: Button
+    var requiredFieldsValidation: Boolean = true
+
 
     val userRepository = UserRepository()
 
@@ -33,50 +35,51 @@ class RegisterActivity : AppCompatActivity() {
         signUp.setOnClickListener {
             val email: String = email.text.toString()
             val password: String = password.text.toString()
+            when {
+                Strings.isNullOrEmpty(email) -> {
+                    toastFillRequiredFields()
+                    requiredFieldsValidation = false
+                }
+                Strings.isNullOrEmpty(password) -> {
+                    toastFillRequiredFields()
+                    requiredFieldsValidation = false
+                }
+                password.length < 8 -> {
+                    toastPasswordIsToShort()
+                    requiredFieldsValidation = false
+                }
+            }
+            firebaseCreateUserWithEmailAndPassword(email, password)
+        }
+    }
 
-            if (TextUtils.isEmpty(email)) {
-                Toast.makeText(
-                    applicationContext,
-                    "Please fill in the required fields",
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
-            if (TextUtils.isEmpty(password)) {
-                Toast.makeText(
-                    applicationContext,
-                    "Please fill in the required fields",
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
-            if (password.length < 8) {
-                Toast.makeText(
-                    applicationContext,
-                    "Password must be at least 8 characters",
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
-
+    private fun firebaseCreateUserWithEmailAndPassword(email: String, password: String) {
+        if (requiredFieldsValidation) {
             PMAGApp.firebaseAuth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        userRepository.saveUser(
-                            User(emailAddress = email)
-                        )
+                .addOnCompleteListener { result ->
+                    if (result.isSuccessful) {
+                        userRepository.saveUser(User(emailAddress = email))
                         startActivity(Intent(applicationContext, MainActivity::class.java))
                         finish()
-                    } else {
-                        Toast.makeText(
-                            applicationContext,
-                            "Email or password is wrong",
-                            Toast.LENGTH_SHORT
-                        ).show()
                     }
                 }
         }
+    }
 
-        if (PMAGApp.firebaseAuth.currentUser != null) {
-            startActivity(Intent(applicationContext, MainActivity::class.java))
-        }
+    private fun toastPasswordIsToShort() {
+        Toast.makeText(
+            applicationContext,
+            "Password must be at least 8 characters",
+            Toast.LENGTH_SHORT
+        ).show()
+    }
+
+    private fun toastFillRequiredFields() {
+        Toast.makeText(
+            applicationContext,
+            "Please fill required fields",
+            Toast.LENGTH_SHORT
+        ).show()
     }
 }
 
